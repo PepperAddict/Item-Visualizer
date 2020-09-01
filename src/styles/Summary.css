@@ -1,0 +1,261 @@
+
+
+.generated-image {
+    width: 100%;
+    position: relative;
+    overflow: auto;
+    max-height: 800px;
+}
+.generated-image .button-gray {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+
+.nothing-yet {
+    text-align: right; 
+    color: #ccc;
+}
+
+.summary-container .generated-image img {
+    object-fit: cover;
+    height: auto;
+    width: 100%;
+}
+
+.summary-container textarea {
+    margin: 1rem;
+    padding: 5px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+}
+.no-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e6e9ef;
+}
+.edit-image {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    right: 0px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+    font-size: 30px;
+    cursor: pointer;
+    color: #0085FF;
+    transition: .5s;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.1);
+}
+.edit-image svg {
+    fill: #0085FF;
+}
+.edit-image:hover {
+    color:white;
+    background: #0085FF;
+    transition: .5s;
+}
+
+.edit-image:hover svg {
+    fill: white;
+}
+.form-submit {
+    max-width: 500px;
+    margin: auto;
+}
+.input-link {
+    display: grid;
+    text-align: left;
+    row-gap: 10px;
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 850px) {
+    .input-button-together {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 1fr 50px;
+    }
+}
+.input-button-together {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 10px;
+    margin-top: 20px;
+}
+
+
+.input-link input {
+    height: 50px;
+    outline: 0px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.button-mode, .button-mode-real {
+    text-align: left; 
+    margin: 0 0 20px 0;
+    
+}
+.button-mode-real label {
+    border-radius: 18px;
+    margin-right: 5px !important;
+}
+.button-mode label, .button-mode-real label {
+    position: relative;
+    width: 100px;
+    margin: 10px 0px 0 0;
+    padding: 10px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    color: #0085ff;
+}
+
+
+.button-mode-real label:hover {
+    background: #E6E9EF;
+    transition: .2s;
+  }
+.button-mode input, .button-mode-real input {
+    width: 100%;
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+
+
+.summary-container {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr auto;
+    grid-gap: 10px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    max-height: 800px;
+}
+.summary-container #containit {
+    min-width: 350px;
+}
+.summary-container #thumbnail {
+    max-height: 600px;
+}
+
+@media screen and (max-width: 850px) {
+    .summary-container {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+.summary-container img {
+    height: 800px;
+    object-fit: cover;
+}
+
+/* edit image  */
+
+.drawing-container {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    width: 100%;
+    overflow: auto;
+    grid-gap: 10px;
+}
+
+.draw-side-options {
+    position: sticky;
+    top: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 800px;
+}
+.draw-side-options input, .draw-side-options textarea {
+    height: 50px;
+}
+.bottom-corner {
+    border-radius: 18px 18px 0 0 !important;
+    position: sticky !important;
+}
+
+.draw-side-options span {
+    display: flex;
+    margin: 10px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+    font-family: serif;
+    font-size: 20px;
+    color: white;
+    text-shadow: 1px 1px 1px #000;
+}
+.draw-side-options button {
+    height: 40px;
+    margin: 10px;
+    border: 0px;
+    transition: .2s;
+    cursor: pointer;
+    padding: 5px 15px;
+    min-width: 100px;
+    border-radius: 20px;
+    outline: 0px;
+}
+.draw-side-options button:not([type="submit"]) {
+    background: #DFF0FF;
+}
+
+.draw-side-options button:hover {
+    background:#0085FF;
+    transition: .2s;
+    color: white;
+}
+
+.canvas-container {
+    position: relative;
+    display: grid;
+}
+
+
+
+canvas {
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.enter-text {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+}
+.enter-text input {
+    width: 100%;
+    height: 50px;
+    box-sizing: border;
+}
+
+.reset-img {
+    border: 0px;
+    background: #DFF0FF;
+    padding: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 0px;
+}
+.reset-img:hover {
+    background: #F65F7C;
+    color: white;
+}
