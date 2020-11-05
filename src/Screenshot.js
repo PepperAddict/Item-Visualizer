@@ -9,7 +9,8 @@ export default function ApiCall(props) {
   const [url, setUrl] = useState(null);
   const [full, setFull] = useState("no");
   const [resolution, setResolution] = useState("desktop");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [cancel, setCancel] = useState(false)
 
   const quickThumbnail = async (e) => {
 
@@ -26,10 +27,10 @@ export default function ApiCall(props) {
     if (isUrl) {
       setLoading(true)
       controller = new AbortController();
-      //abort fetch if it takes longer than 30 seconds.
-      setTimeout(() => {controller.abort()}, 30000)
+      //abort fetch if it takes longer than 60 seconds.
+      setTimeout(() => {controller.abort()}, 60000)
 
-      fetch(talkingImage)
+      fetch(talkingImage, {signal: controller.signal})
         .then((res) => res.blob())
         .then(async (image) => {
           var imageUrl = URL.createObjectURL(image);
@@ -86,7 +87,7 @@ export default function ApiCall(props) {
                   placeholder="Paste URL ex: https://www.example.com"
                   onChange={(e) => setUrl(e.target.value)}
                 />
-                {loading ?<Loading />
+                {loading ?<Loading controller={controller} />
                 :
                 <button type="submit">Attach</button>}
               </span>

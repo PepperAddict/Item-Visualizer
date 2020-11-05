@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import mergeImages from "merge-images";
 import fullIcon from "./icon/full.svg";
 import { closeFullscreen, openFullscreen } from "./utils";
+import HiddenButtons from './HiddenButtons';
 
 export default function EditImage(props) {
   const canvas = useRef(null);
@@ -163,7 +164,7 @@ export default function EditImage(props) {
       color: color,
       mode: draw ? "draw" : "text",
     });
-    console.log(forUndo)
+
   };
 
   const generateImage = async (e) => {
@@ -173,7 +174,6 @@ export default function EditImage(props) {
       await fetch(b64)
         .then((res) => res.blob())
         .then(async (res) => {
-          console.log(res);
           const theFile = {
             file: res,
             name: "thumbnail",
@@ -233,8 +233,7 @@ export default function EditImage(props) {
           <button type="submit" onClick={() => generateImage()}>
             Save Image
           </button>
-
-          <button onClick={() => undo()}> Undo </button>
+{/* <button onClick={() => undo()}> Undo </button> */}
           <p>
             <strong>Colors</strong>
           </p>
@@ -317,9 +316,7 @@ export default function EditImage(props) {
       </div>
       {bg && (
         <div className="canvas-container">
-          <span onClick={() => fullscreen()} className="expand">
-            <img src={fullIcon} alt="fullscreen" />
-          </span>
+          {/* <HiddenButtons setEditImage={null} edited={null} resetImage={null} fullscreen={fullscreen}/> */}
 
           <canvas
             id="canvasDiv"

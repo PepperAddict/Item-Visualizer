@@ -68,13 +68,16 @@ position: relative
     display: flex;
     width: 30px;
     height: 30px;
-
+    position: absolute;
     z-index: 2;
     top: 0px;
     left: 0px;
     background: white;
     padding: 5px;
     cursor: pointer;
+}
+.show-more img {
+    height: 100% !important;
 }
 
 .edit-image {
@@ -179,7 +182,7 @@ position: relative
     display: grid;
     height: 100%;
     grid-template-columns: 1fr auto;
-    grid-gap: 10px;
+    grid-gap: 30px;
     width: 100%;
     padding: 20px;
     box-sizing: border-box;

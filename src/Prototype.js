@@ -92,7 +92,7 @@ export default function Prototype(props) {
     };
     const talkingImage = `https://talkingcloud.io/api/1/play/?url=${url}&mode=${apicall.mode}&full=${apicall.full}`;
     try {
-      fetch(talkingImage) //, { signal: controller.signal })
+      fetch(talkingImage, {signal: controller.signal})
         .then((res) => res.blob())
         .then(async (image) => {
           var imageUrl = URL.createObjectURL(image);
@@ -283,7 +283,7 @@ export default function Prototype(props) {
                     onChange={(e) => setUrl(e.target.value)}
                   />
                   {loading ? (
-                    <Loading />
+                    <Loading controller={controller} />
                   ) : (
                     <button type="submit">Attach</button>
                   )}

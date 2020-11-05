@@ -62,7 +62,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
     data.append("updateId", update_id);
 
     axios
-      .post("https://www.talkingcloud.io/api/1/mupload", data, {
+      .post("https://talkingcloud.io/api/1/mupload", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -158,7 +158,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
                       {item.name}
                     </button>
                   );
-                })}{" "}
+                }) }
               </div>
             )}
           </div>

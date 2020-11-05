@@ -4,7 +4,8 @@ import { BoardContext } from "./Context";
 import EditImage from "./EditImage";
 import "./styles/Summary.css";
 import { closeFullscreen, openFullscreen } from "./utils";
-import fullIcon from "./icon/full.svg";
+
+import HiddenButtons from './HiddenButtons';
 
 export default function Summary({ currentMock }) {
   const [mock, setmock] = useState(currentMock);
@@ -15,7 +16,7 @@ export default function Summary({ currentMock }) {
   const [newTitle, setNewTitle] = useState(mock.realTitle);
   const [rawImage, setRawImage] = useState(mock.rawImage);
   const [edited, setEdited] = useState(false);
-  const [showMore, setShowMore] = useState(false)
+
 
   const thumbnailEdit = (e) => {
     setFromThumbnail(true);
@@ -60,38 +61,7 @@ export default function Summary({ currentMock }) {
               {generatedImage && (
                 <div className="generated-image" id="generated">
                   
-                  {showMore ? (
-                  <div className="button-container" 
-                  // onMouseLeave={() => setShowMore(false)}
-                  >
-                    
-                    <span
-                    onClick={() => fullscreen("generated")}
-                    className="expand"  >
-                    <img src={fullIcon} alt="fullscreen" />
-                  </span> 
-                  
-                    <span
-                    onClick={(e) => setEditImage(true)}
-                    className="edit-image">
-                    ✎
-                  </span>
-                  {edited === true ? (
-                      <button
-                        className="button-gray reset-button"
-                        onClick={() => resetImage()}
-                      >
-                        ↺
-                      </button>
-                    ) : null}
-
-                  </div> )
-                  : (<span className="show-more" onMouseEnter={() => setShowMore(true)} onMouseLeave={() => setShowMore(false)} onClick={() => (showMore) ? setShowMore(false) : setShowMore(true)}> <img src={require("./icon/dotshorz.svg")} />
-                  </span> )
-
-                }
-
-
+                  <HiddenButtons fullscreen={fullscreen} setEditImage={setEditImage} edited={edited} resetImage={resetImage}/> 
 
                   <span className="thumb-container">
                     <img src={generatedImage} alt="generated screen shot" />
@@ -128,18 +98,7 @@ export default function Summary({ currentMock }) {
                       position: "relative",
                     }}
                   >
-                    <span
-                      onClick={(e) => thumbnailEdit()}
-                      className="edit-image hide-this-thing"
-                    >
-                      ✎
-                    </span>
-                    <span
-                      onClick={() => fullscreen("thumbnail")}
-                      className="expand hide-this-thing"
-                    >
-                      <img src={fullIcon} alt="fullscreen" />
-                    </span>
+<HiddenButtons fullscreen={fullscreen} setEditImage={setEditImage} edited={edited} resetImage={resetImage}/> 
                     <img
                       style={{
                         width: "100%",
