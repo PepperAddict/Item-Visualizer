@@ -62,14 +62,12 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
     data.append("updateId", update_id);
 
     axios
-      .post("https://item-visualizer.herokuapp.com/api/1/mupload", data, {
+      .post("https://www.talkingcloud.io/api/1/mupload", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
         onUploadProgress: (progressEvent) => {
-          setUploadPercentage(
-            Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          );
+          setUploadPercentage(Math.round((progressEvent.loaded * 100) / progressEvent.total));
           // clear percentage
           setTimeout(() => setUploadPercentage(0), 10000);
         },

@@ -7,7 +7,6 @@ import { closeFullscreen, openFullscreen } from "./utils";
 import fullIcon from "./icon/full.svg";
 
 export default function Summary({ currentMock }) {
-  const canny = useRef(null);
   const [mock, setmock] = useState(currentMock);
   const [error, setError] = useState(null);
   const [editImage, setEditImage] = useState(null);
@@ -15,7 +14,8 @@ export default function Summary({ currentMock }) {
   const [generatedImage, setGeneratedImage] = useState(mock.generatedImage);
   const [newTitle, setNewTitle] = useState(mock.realTitle);
   const [rawImage, setRawImage] = useState(mock.rawImage);
-  const [fully, setFully] = useState(false);
+  const [edited, setEdited] = useState(false);
+  const [showMore, setShowMore] = useState(false)
 
   const thumbnailEdit = (e) => {
     setFromThumbnail(true);
@@ -24,20 +24,21 @@ export default function Summary({ currentMock }) {
 
   const resetImage = (e) => {
     if (mock.generatedImage) {
+      setEdited(false);
       setGeneratedImage(mock.generatedImage);
-      setRawImage(mock.rawImage)
+      setRawImage(mock.rawImage);
     } else if (mock.thumbnail) {
       setGeneratedImage(null);
     }
   };
 
   const fullscreen = (name) => {
-    let thatElement = document.getElementById(name)
+    let thatElement = document.getElementById(name);
 
     if (!document.fullscreenElement) {
       openFullscreen(thatElement);
     } else {
-      closeFullscreen()
+      closeFullscreen();
     }
   };
 
@@ -58,23 +59,44 @@ export default function Summary({ currentMock }) {
             <Fragment>
               {generatedImage && (
                 <div className="generated-image" id="generated">
-                  <span
-                    onClick={(e) => setEditImage(true)}
-                    className="edit-image"
+                  
+                  {showMore ? (
+                  <div className="button-container" 
+                  // onMouseLeave={() => setShowMore(false)}
                   >
+                    
+                    <span
+                    onClick={() => fullscreen("generated")}
+                    className="expand"  >
+                    <img src={fullIcon} alt="fullscreen" />
+                  </span> 
+                  
+                    <span
+                    onClick={(e) => setEditImage(true)}
+                    className="edit-image">
                     ✎
                   </span>
-                  <span onClick={() => fullscreen('generated')} className="expand">
-                    <img src={fullIcon} alt="fullscreen" />
-                  </span>
+                  {edited === true ? (
+                      <button
+                        className="button-gray reset-button"
+                        onClick={() => resetImage()}
+                      >
+                        ↺
+                      </button>
+                    ) : null}
 
-                  <img src={generatedImage} alt="generated screen shot" />
-                  <button
-                    className="button-gray bottom-corner"
-                    onClick={() => resetImage()}
-                  >
-                    Reset Image
-                  </button>
+                  </div> )
+                  : (<span className="show-more" onMouseEnter={() => setShowMore(true)} onMouseLeave={() => setShowMore(false)} onClick={() => (showMore) ? setShowMore(false) : setShowMore(true)}> <img src={require("./icon/dotshorz.svg")} />
+                  </span> )
+
+                }
+
+
+
+                  <span className="thumb-container">
+                    <img src={generatedImage} alt="generated screen shot" />
+
+                  </span>
                 </div>
               )}
               {mock.iframe && <embed src={mock.iframe} />}
@@ -95,17 +117,15 @@ export default function Summary({ currentMock }) {
                 }}
                 id="containit"
                 ref={context.setSumm}
-              >    
-
+              >
                 {mock.thumbnail && !generatedImage && (
                   <div
-                  id="thumbnail"
+                    id="thumbnail"
                     style={{
                       width: "100%",
                       height: "100%",
                       overflow: "auto",
                       position: "relative",
-      
                     }}
                   >
                     <span
@@ -114,9 +134,12 @@ export default function Summary({ currentMock }) {
                     >
                       ✎
                     </span>
-                    <span onClick={() => fullscreen('thumbnail')} className="expand hide-this-thing">
-                    <img src={fullIcon} alt="fullscreen" />
-                  </span>
+                    <span
+                      onClick={() => fullscreen("thumbnail")}
+                      className="expand hide-this-thing"
+                    >
+                      <img src={fullIcon} alt="fullscreen" />
+                    </span>
                     <img
                       style={{
                         width: "100%",
@@ -133,16 +156,17 @@ export default function Summary({ currentMock }) {
                 <div
                   style={{
                     display: "grid",
-                    gridRowGap: "5px"
+                    gridRowGap: "5px",
                   }}
                 >
-                                          <h3>Summary</h3>
+                  <h1>Summary</h1>
                   <label style={{ display: "flex" }}>
                     <p style={{ marginRight: "10px", width: "60px" }}>
                       <strong>Title:</strong>
                     </p>
                     <textarea
-                      style={{ height: "40px" }}
+                      placeholder="Enter a Title"
+                      style={{ height: "45px" }}
                       value={newTitle}
                       onChange={(e) => setNewTitle(e.target.value)}
                     />
@@ -178,6 +202,7 @@ export default function Summary({ currentMock }) {
                       <strong>Description:</strong>
                     </p>
                     <textarea
+                      placeholder="Enter a Description"
                       value={mock.description}
                       onChange={(e) =>
                         setmock({ ...mock, description: e.target.value })
@@ -198,6 +223,7 @@ export default function Summary({ currentMock }) {
               setEditImage={setEditImage}
               setFile={context.setFile}
               setError={setError}
+              setEdited={setEdited}
             />
           )
         }

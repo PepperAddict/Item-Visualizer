@@ -1,6 +1,7 @@
-import React, { useState} from "react";
+import React, { useState, Fragment} from "react";
 import Summary from "./Summary";
 import "./styles/Summary.css";
+import Loading from './Loading'
 let controller
 export default function ApiCall(props) {
   const [error, setError] = useState(false);
@@ -21,14 +22,14 @@ export default function ApiCall(props) {
       isUrl = false;
     }
 
-    const talkingImage = `https://item-visualizer.herokuapp.com/api/1/puppeteer/?url=${url}&mode=${resolution}&full=${full}`;
+    const talkingImage = `https://talkingcloud.io/api/1/play/?url=${url}&mode=${resolution}&full=${full}`;
     if (isUrl) {
       setLoading(true)
       controller = new AbortController();
       //abort fetch if it takes longer than 30 seconds.
       setTimeout(() => {controller.abort()}, 30000)
 
-      fetch(talkingImage, {signal: controller.signal})
+      fetch(talkingImage)
         .then((res) => res.blob())
         .then(async (image) => {
           var imageUrl = URL.createObjectURL(image);
@@ -55,9 +56,10 @@ export default function ApiCall(props) {
           await setCurrentMock(iFrameData);
           props.context.setSetup(true);
         })
-        .catch(() => {
+        .catch((ee) => {
           controller = new AbortController();
           setError('Something went wrong. Please try again')
+          console.log(ee)
           setLoading(false)});
     }
   };
@@ -84,7 +86,7 @@ export default function ApiCall(props) {
                   placeholder="Paste URL ex: https://www.example.com"
                   onChange={(e) => setUrl(e.target.value)}
                 />
-                {loading ?<div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                {loading ?<Loading />
                 :
                 <button type="submit">Attach</button>}
               </span>

@@ -21,7 +21,7 @@ To start this app make sure you:
 ** For Adobe XD: src/Prototype.js line 24 where it says `x-api-key`: insert your own Adobe XD cloud token. 
 *** Getting an Adobe XD api key is free, but not instant: https://adobexdplatform.com/cloud-content-api-docs/
 
-* The backend is hosted on heroku: https://item-visualizer.herokuapp.com/  The backend generates a screenshot using https://www.npmjs.com/package/puppeteer[puppeteer magic] and sends in the update directly to your Monday's item. 
+* The backend is hosted on heroku: https://www.talkingcloud.io/  The backend generates a screenshot using https://www.npmjs.com/package/puppeteer[puppeteer magic] and sends in the update directly to your Monday's item. 
 Feel free to host your own if you like: 
 ** Source code for backend: https://github.com/PepperAddict/monday-backend
 ** enter your own Monday apikey in `server/middleware/mondayupload.js` line 51 `Authorization:`

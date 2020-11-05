@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import Summary from "./Summary";
 import Upload from "./FileUpload";
 import support from "./icon/supports.png";
-import Capture from './Capture'
+import Capture from "./Capture";
+import Loading from "./Loading";
 import "./styles/Prototype.css";
 let controller;
 
@@ -21,7 +22,7 @@ export default function Prototype(props) {
     const xdId = newurl[viewIndex + 1];
     const xd = await fetch("https://xdce.adobe.io/v2/document/" + xdId, {
       headers: {
-        "x-api-key": "",
+        "x-api-key": process.env.XD_API,
       },
     });
     await xd
@@ -46,10 +47,9 @@ export default function Prototype(props) {
     if (service === "Figma") {
       const apiId = `figma-${id}`;
       if (id) {
-
         const figma = await fetch(`https://api.figma.com/v1/files/${id}`, {
           headers: {
-            "X-Figma-Token": "",
+            "X-Figma-Token": process.env.FIGMA_API,
           },
         });
         await figma
@@ -90,9 +90,9 @@ export default function Prototype(props) {
       mode: "desktop",
       full: "yes",
     };
-    const talkingImage = `https://item-visualizer.herokuapp.com/api/1/puppeteer/?url=${url}&mode=${apicall.mode}&full=${apicall.full}`;
+    const talkingImage = `https://talkingcloud.io/api/1/play/?url=${url}&mode=${apicall.mode}&full=${apicall.full}`;
     try {
-      fetch(talkingImage, { signal: controller.signal })
+      fetch(talkingImage) //, { signal: controller.signal })
         .then((res) => res.blob())
         .then(async (image) => {
           var imageUrl = URL.createObjectURL(image);
@@ -283,12 +283,7 @@ export default function Prototype(props) {
                     onChange={(e) => setUrl(e.target.value)}
                   />
                   {loading ? (
-                    <div className="lds-ellipsis">
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                    </div>
+                    <Loading />
                   ) : (
                     <button type="submit">Attach</button>
                   )}
@@ -300,17 +295,21 @@ export default function Prototype(props) {
                 <img src={support} alt="supports" />
               </div>
             </form>
-          ) : (attachment === "upload") ? (
+          ) : attachment === "upload" ? (
             <Upload
               setCurrentMock={setCurrentMock}
               setSetup={props.context.setSetup}
               setFile={props.context.setFile}
               setErr={setError}
             />
-          ) : 
-          <Capture setCurrentMock={setCurrentMock} setSetup={props.context.setSetup}
-          setFile={props.context.setFile} setErr={setError} />
-          }
+          ) : (
+            <Capture
+              setCurrentMock={setCurrentMock}
+              setSetup={props.context.setSetup}
+              setFile={props.context.setFile}
+              setErr={setError}
+            />
+          )}
         </div>
       )}
     </div>

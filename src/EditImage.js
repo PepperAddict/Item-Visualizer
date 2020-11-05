@@ -184,6 +184,7 @@ export default function EditImage(props) {
           props.setGeneratedImage(b64);
           props.setFromThumbnail(false);
           closeFullscreen(canny);
+          props.setEdited(true)
           props.setEditImage(false);
         });
     });
