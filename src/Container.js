@@ -15,6 +15,7 @@ export default function Container() {
   const [mode, setMode] = useState("light");
 
   useEffect(() => {
+    //night mode option doesn't work yet...
     const el1 = document.getElementById("style1"),
       el2 = document.getElementById("style2");
     if (mode === "light") {
@@ -24,7 +25,7 @@ export default function Container() {
       el1.disabled = "disabled";
       el2.disabled = undefined;
     }
-  }, []);
+  }, [mode]);
 
   useEffect(() => {
     monday.listen(["settings", "context"], async (res) => {

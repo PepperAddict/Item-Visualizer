@@ -1,11 +1,11 @@
-import React, { useState, Fragment, useRef } from "react";
+import React, { useState, Fragment } from "react";
 import moment from "moment";
 import { BoardContext } from "./Context";
 import EditImage from "./EditImage";
 import "./styles/Summary.css";
 import { closeFullscreen, openFullscreen } from "./utils";
 
-import HiddenButtons from './HiddenButtons';
+import HiddenButtons from "./HiddenButtons";
 
 export default function Summary({ currentMock }) {
   const [mock, setmock] = useState(currentMock);
@@ -18,10 +18,6 @@ export default function Summary({ currentMock }) {
   const [edited, setEdited] = useState(false);
 
 
-  const thumbnailEdit = (e) => {
-    setFromThumbnail(true);
-    setEditImage(true);
-  };
 
   const resetImage = (e) => {
     if (mock.generatedImage) {
@@ -60,12 +56,15 @@ export default function Summary({ currentMock }) {
             <Fragment>
               {generatedImage && (
                 <div className="generated-image" id="generated">
-                  
-                  <HiddenButtons fullscreen={fullscreen} setEditImage={setEditImage} edited={edited} resetImage={resetImage}/> 
+                  <HiddenButtons
+                    fullscreen={fullscreen}
+                    setEditImage={setEditImage}
+                    edited={edited}
+                    resetImage={resetImage}
+                  />
 
                   <span className="thumb-container">
                     <img src={generatedImage} alt="generated screen shot" />
-
                   </span>
                 </div>
               )}
@@ -98,7 +97,12 @@ export default function Summary({ currentMock }) {
                       position: "relative",
                     }}
                   >
-<HiddenButtons fullscreen={fullscreen} setEditImage={setEditImage} edited={edited} resetImage={resetImage}/> 
+                    <HiddenButtons
+                      fullscreen={fullscreen}
+                      setEditImage={setEditImage}
+                      edited={edited}
+                      resetImage={resetImage}
+                    />
                     <img
                       style={{
                         width: "100%",

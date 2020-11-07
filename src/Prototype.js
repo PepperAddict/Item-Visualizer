@@ -15,7 +15,7 @@ export default function Prototype(props) {
 
   const [attachment, setattachment] = useState("url");
 
-  const xdCommunication = async (name, url) => {
+  const xdCommunication = async ( url, name) => {
     //get XD's ID from the URL
     const newurl = url.split("/");
     const viewIndex = newurl.indexOf("view");
@@ -182,7 +182,7 @@ export default function Prototype(props) {
             setError(false);
             break;
           case findService("adobe"):
-            xdCommunication("Adobe XD", url);
+            xdCommunication(url, "adobe XD");
             setError(false);
             break;
           case findService("docs.google"):

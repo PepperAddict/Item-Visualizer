@@ -1,4 +1,4 @@
-import React, { useState, Fragment} from "react";
+import React, { useState} from "react";
 import Summary from "./Summary";
 import "./styles/Summary.css";
 import Loading from './Loading'
@@ -10,7 +10,6 @@ export default function ApiCall(props) {
   const [full, setFull] = useState("no");
   const [resolution, setResolution] = useState("desktop");
   const [loading, setLoading] = useState(false);
-  const [cancel, setCancel] = useState(false)
 
   const quickThumbnail = async (e) => {
 

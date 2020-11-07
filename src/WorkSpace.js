@@ -8,7 +8,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
   const [items, setItems] = useState(null);
 
   const [newItems, setNewItems] = useState(null);
-  const [percent, setUploadPercentage] = useState("0");
+  // const [percent, setUploadPercentage] = useState("0");
 
   useEffect(() => {
     monday.listen(["settings", "context"], async (res) => {
@@ -66,11 +66,13 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        onUploadProgress: (progressEvent) => {
-          setUploadPercentage(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-          // clear percentage
-          setTimeout(() => setUploadPercentage(0), 10000);
-        },
+        // onUploadProgress: (progressEvent) => {
+        //   //progress bar works great, but it doesn't show upload progress from Monday. This 
+        //   //feature is useless at the moment.
+        //   setUploadPercentage(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+        //   // clear percentage
+        //   setTimeout(() => setUploadPercentage(0), 10000);
+        // },
       })
       .then(() => {
         //once completed, reset file

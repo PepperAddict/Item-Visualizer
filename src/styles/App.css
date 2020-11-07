@@ -1,4 +1,4 @@
-
+@import url(https://weloveiconfonts.com/api/?family=fontawesome);
 .App {
   text-align: center;
   display: grid;
@@ -172,4 +172,9 @@ nav ul li:hover {
   height: 25px;
   width: 25px;
   background: #0085ff;
+}
+
+/* font awesome icon stuff */
+[class*="fontawesome-"]:before {
+  font-family: 'FontAwesome', sans-serif;
 }

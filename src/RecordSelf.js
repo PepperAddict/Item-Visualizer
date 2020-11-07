@@ -1,4 +1,4 @@
-import React, { useState, useRef, Fragment } from "react";
+import React, { useState, useRef } from "react";
 import Summary from "./Summary";
 import "./styles/Video.css";
 let mediaRecorder;
@@ -201,45 +201,52 @@ export default function RecordSelf(props) {
           )}
 
           <h2>Show a Video</h2>
-          <h3>Record anything with your camera.</h3>
+          <h3>Initiate and Record a video.</h3>
           {recording ? (
             <button className="button-red" onClick={() => stopRecord()}>
-              Stop Record
+             <span className="fontawesome-remove"></span>
+              Stop Recording
             </button>
           ) : (
-            <div className="together-vid">
+            <div className="together-vid video-options">
               {isMobile ? (
-                <Fragment>
+                <span className="split">
                   <button
                     className={src ? "button-gray" : "button-blue"}
                     onClick={() => startRecord("face")}
                   >
-                    Record Front
+                    <span className="fontawesome-user"></span>
+                    Front
                   </button>
                   <button
                     className={src ? "button-gray" : "button-blue"}
                     onClick={() => startRecord("env")}
                   >
-                    Record Environment
+                    <span className="fontawesome-globe"></span>
+                    Environment
                   </button>
-                </Fragment>
+                </span>
               ) : (
-                <Fragment>
-                              <button
+                
+                <span className="split">
+                  <button
                   className={src ? "button-gray" : "button-blue"}
                   onClick={() => startRecord()}
                 >
-                  Record Self
+                  <span className="fontawesome-camera"></span>
+                  Camera
                 </button>    
                 <button className={src ? "button-gray": "button-blue"} onClick={() => desktopRecord()}>
-                Record Screen
+                <span className="fontawesome-desktop"></span>
+                Screen
               </button>
-                </Fragment>
+                </span>
 
               )}
 
               {src && !error && (
                 <button onClick={(e) => saveVideo()} className="button-blue">
+                 <span className="fontawesome-ok"></span>
                   Save and Continue
                 </button>
               )}

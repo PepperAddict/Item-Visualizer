@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import mergeImages from "merge-images";
-import fullIcon from "./icon/full.svg";
+
 import { closeFullscreen, openFullscreen } from "./utils";
 import HiddenButtons from './HiddenButtons';
 

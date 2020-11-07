@@ -89,16 +89,28 @@ video {
 
 .video-options {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
     grid-gap: 5px;
 }
 .final {
     display: grid;
     grid-template-rows: 1fr 1fr;
+    position: absolute;
+    place-items: end;
+    width: 100%;
+    right: 10px;
+}
+.initiate {
+    margin: 10px 0 20px;
 }
 
-.video-options span {
+.video-options .split {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 5px;
+}
+
+[class*="fontawesome-"]:before {
+    font-family: 'FontAwesome', sans-serif;
+    margin-right: 10px;
 }

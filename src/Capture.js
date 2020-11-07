@@ -1,7 +1,8 @@
 import React, { useRef, useState, Fragment } from "react";
-import fullIcon from "./icon/full.svg";
+
 import "./styles/Video.css";
 import { closeFullscreen, openFullscreen } from "./utils";
+import HiddenButtons from "./HiddenButtons";
 export default function Capture(props) {
   const vidEle = useRef(null);
   const [height, setHeight] = useState(800);
@@ -10,7 +11,7 @@ export default function Capture(props) {
   const [globalStream, setStream] = useState(null);
 
   const canny = useRef(null);
-  const [src, setSRC] = useState(null);
+  const [src] = useState(null);
   const [error, setError] = useState(null);
   const [captured, setCaptured] = useState(null);
   const [isMobile] = useState(() => {
@@ -80,7 +81,7 @@ export default function Capture(props) {
       })
       .catch((err) => {
         setInitiated(false);
-        setError("something went wrong");
+        setError("Something went wrong");
         console.log(err);
       });
   };
@@ -168,74 +169,75 @@ export default function Capture(props) {
   };
 
   const fullscreen = () => {
-
     if (!document.fullscreenElement) {
       openFullscreen(canny.current);
     } else {
-      closeFullscreen()
+      closeFullscreen();
     }
   };
 
   return (
     <div className="video-capture-container">
-      <h3>Snap your own screenshot using your camera.</h3>
+      {error && (
+        <p className="error-message" onClick={() => setError(false)}>
+          {error}
+        </p>
+      )}
+      <h3>Snap a screenshot using your screen or camera.</h3>
       <div className="video-options">
         {initiated ? (
-          <div className="snap">
-            <h4>Step 2: Snap a picture</h4>
-            <span>
+          <div className="initiate">
+
+            <span className="split">
               <button className="button-red" onClick={() => stop()}>
+                <span className="fontawesome-remove"></span>
                 Stop Camera
               </button>
               <button className="button-blue" onClick={() => capture()}>
+                <span className="fontawesome-circle-blank">
+
+                </span>
                 Capture
               </button>
             </span>
           </div>
         ) : isMobile ? (
           <div className="initiate">
-            <h4>Step 1: Initiate the Camera</h4>
-            <span>
+            <span className="split">
               <button
                 className={captured ? "button-gray" : "button-blue"}
                 onClick={() => startRecord("front")}
               >
+                <span className="fontawesome-user"></span>
                 Front Camera
               </button>
               <button
                 className={captured ? "button-gray" : "button-blue"}
                 onClick={() => startRecord("environment")}
               >
+                <span className="fontawesome-globe"></span>
                 Back Camera
               </button>
             </span>
           </div>
         ) : (
           <div className="initiate">
-            <h4>Step 1: Initiate the Camera</h4>
-            <span>
+            <span className="split">
               <button
                 className={captured ? "button-gray" : "button-blue"}
                 onClick={() => startRecord("desktop")}
               >
+                <span class="fontawesome-desktop"></span>
                 Screen
               </button>
               <button
                 className={captured ? "button-gray" : "button-blue"}
                 onClick={() => startRecord("camera")}
               >
+                <span class="fontawesome-camera"></span>
                 Camera
               </button>
             </span>
-          </div>
-        )}
-
-        {captured && (
-          <div className="final">
-            <h4>Final Step: Save and Continue</h4>
-            <button className="button-blue" onClick={() => sendIt()}>
-              Save
-            </button>
           </div>
         )}
       </div>
@@ -252,13 +254,23 @@ export default function Capture(props) {
       />
       <div className="limit">
         {captured && (
-          <span
-            onClick={() =>  fullscreen() }
-            className="expand"
-          >
-            <img src={fullIcon} alt="fullscreen" />
-          </span>
+          <Fragment>
+                     <HiddenButtons
+            fullscreen={fullscreen}
+            setEditImage={null}
+            edited={null}
+            resetImage={null}
+          /> 
+        <div className="final">
+          <button className="button-blue" onClick={() => sendIt()}>
+            <span className="fontawesome-ok"></span>
+            Save and Continue
+          </button>
+        </div>
+          </Fragment>
+
         )}
+
 
         <canvas ref={canny} width={width} height={height} />
       </div>
