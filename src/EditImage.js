@@ -186,6 +186,7 @@ export default function EditImage(props) {
           closeFullscreen(canny);
           props.setEdited(true)
           props.setEditImage(false);
+          props.setReady(true)
         });
     });
   };

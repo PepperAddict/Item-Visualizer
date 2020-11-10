@@ -67,7 +67,7 @@ export default function ApiCall(props) {
   return (
     <div className="choose-container">
       {props.context.setup && currentMock && !error ? (
-        <Summary currentMock={currentMock} setFile={props.setFile} />
+        <Summary currentMock={currentMock} setFile={props.setFile} context={props.context} />
       ) : (
         <div className="input-container">
           <form onSubmit={quickThumbnail} className="form-submit">

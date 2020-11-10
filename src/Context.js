@@ -10,6 +10,7 @@ export function BoardProvider(props) {
     const [file, setFile] = useState(null);
     const [nav, setNav] = useState('welcome')
     const [play, setPlay] = useState(0);
+    const [ready, setReady] = useState(true)
 
   
 
@@ -26,7 +27,9 @@ export function BoardProvider(props) {
         nav, 
         setNav: e => setNav(e),
         setup, 
-        setSetup: e => setSetup(e)
+        setSetup: e => setSetup(e),
+        ready,
+        setReady: e => setReady(e)
     }}>{props.children}</BoardContext.Provider>
     )
 }

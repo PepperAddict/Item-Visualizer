@@ -108,6 +108,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
       })
       .then(() => {
         setFile(null);
+        setNewItems(null)
         context.setSetup(false);
       });
   };
@@ -131,7 +132,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
               )} */}
             <label>
               <strong>Send Update to</strong>
-              {context.setup ? (
+              {context.setup && context.ready ? (
                 <Fragment>
                   <input
                     onChange={(e) => searchInput(e.target.value)}
@@ -148,7 +149,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
               )}
             </label>
 
-            {newItems && context.setup && (
+            {newItems && context.setup && context.ready && (
               <div className="item-list">
                 {newItems.slice(0, 3).map((item, key) => {
                   return (

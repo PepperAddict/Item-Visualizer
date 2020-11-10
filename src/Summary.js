@@ -61,6 +61,7 @@ export default function Summary({ currentMock }) {
                     setEditImage={setEditImage}
                     edited={edited}
                     resetImage={resetImage}
+                    setReady={context.setReady}
                   />
 
                   <span className="thumb-container">
@@ -102,6 +103,9 @@ export default function Summary({ currentMock }) {
                       setEditImage={setEditImage}
                       edited={edited}
                       resetImage={resetImage}
+                      setReady={context.setReady}
+
+
                     />
                     <img
                       style={{
@@ -187,6 +191,7 @@ export default function Summary({ currentMock }) {
               setFile={context.setFile}
               setError={setError}
               setEdited={setEdited}
+              setReady={context.setReady}
             />
           )
         }

@@ -166,6 +166,7 @@ export default function Capture(props) {
     props.setFile(thefile);
     props.setCurrentMock(iFrameData);
     props.setSetup(true);
+    props.context.setReady(true)
   };
 
   const fullscreen = () => {
