@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // const reader = new FileReader();
 
@@ -7,9 +7,13 @@ export default function FileUpload({
   setCurrentMock,
   setSetup,
   setFile,
-  setErr
+  setErr,
 }) {
   const [hover, setHover] = useState(null);
+
+  useEffect(() => {
+   console.log(window.clipboardData) 
+  })
 
   const setLink = (e, nosupport = false, image = null) => {
     let data;
@@ -66,6 +70,7 @@ export default function FileUpload({
     let kb = parseFloat(size.toFixed(2));
     let numb = 500000;
     numb.toFixed(2);
+
     if (kb > numb) {
       setErr("Sorry, file exceeds 500 MB size limit");
     } else {
@@ -80,6 +85,9 @@ export default function FileUpload({
         case "video/mp4":
         case "application/pdf":
           setLink(imageFile);
+          break;
+        case "load":
+          setLink(imageFile, false, true);
           break;
         default:
           setLink(imageFile, true);
@@ -162,6 +170,20 @@ export default function FileUpload({
     }
   };
 
+  const handlePaste = (e) => {
+    const items = (e.clipboardData || window.clipboardData).items;
+    for (let item of items) {
+      if (item.kind === "file") {
+        var blob = item.getAsFile();
+        var reader = new FileReader();
+        reader.onload = (event) => {
+          fileupload(e, blob);
+        };
+        reader.readAsDataURL(blob);
+      }
+    }
+  };
+
   return (
     <form>
       <h3>Upload a brainstorm/sketch/wireframe/mockup/prototype/etc.</h3>
@@ -172,6 +194,8 @@ export default function FileUpload({
         onDragOver={(e) => handleDragOver(e)}
         onDragEnter={(e) => handleDragEnter(e)}
         onDragLeave={(e) => handleDragLeave(e)}
+        onPaste={(e) => handlePaste(e)}
+        onCopy={(e) => handlePaste(e)}
       >
         Drag or
         <label>
