@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import mergeImages from "merge-images";
 
 import { closeFullscreen, openFullscreen } from "./utils";
-import HiddenButtons from './HiddenButtons';
+import HiddenButtons from "./HiddenButtons";
 
 export default function EditImage(props) {
   const canvas = useRef(null);
@@ -25,7 +25,7 @@ export default function EditImage(props) {
   const [context, setContext] = useState(null);
 
   const toDataURL = (url, callback) => {
-    fetch(url)
+    fetch('https://cors-anywhere.herokuapp.com/' + url)
       .then((res) => res.blob())
       .then((response) => {
         let newreader = new FileReader();
@@ -41,17 +41,19 @@ export default function EditImage(props) {
   };
 
   useEffect(() => {
-    if (props.fromThumbnail === true) {
-      toDataURL(props.thumbnail, (dataUrl) => {
-        setbg(dataUrl);
-      });
-    } else {
-      reader.readAsDataURL(props.image);
-      reader.onloadend = () => {
-        setbg(reader.result);
-      };
-    }
-  }, [reader, props]);
+
+      if (props.image instanceof Blob) {
+        reader.readAsDataURL(props.image);
+        reader.onloadend = () => {
+          setbg(reader.result);
+        };
+      } else {
+        toDataURL(props.thumbnail, (dataUrl) => {
+          setbg(dataUrl);
+        });
+      }
+    
+  }, [reader, toDataURL]);
 
   useEffect(() => {
     if (canvas && bg) {
@@ -164,7 +166,6 @@ export default function EditImage(props) {
       color: color,
       mode: draw ? "draw" : "text",
     });
-
   };
 
   const generateImage = async (e) => {
@@ -182,11 +183,10 @@ export default function EditImage(props) {
           props.setRawImage(res);
           props.setFile(theFile);
           props.setGeneratedImage(b64);
-          props.setFromThumbnail(false);
           closeFullscreen(canny);
-          props.setEdited(true)
+          props.setEdited(true);
           props.setEditImage(false);
-          props.setReady(true)
+          props.setReady(true);
         });
     });
   };
@@ -211,7 +211,7 @@ export default function EditImage(props) {
     context.lineWidth = range;
 
     for (var i = 0; i < redoStack.length; i++) {
-      console.log(i)
+      console.log(i);
       // context.beginPath();
       // context.moveTo(redoStack.x[i - 1], redoStack.y[i - 1]);
       // context.lineTo(redoStack.x[i], redoStack.y[i]);
@@ -228,114 +228,118 @@ export default function EditImage(props) {
   };
 
   return (
-    <div className="drawing-container" id="draw-container">
-      <div className="draw-side-options">
-        <div>
-          <button type="submit" onClick={() => generateImage()}>
-            Save Image
-          </button>
-{/* <button onClick={() => undo()}> Undo </button> */}
-          <p>
-            <strong>Colors</strong>
-          </p>
-          <div className="together">
-            <span
-              className={color === "#F65F7C" ? "active" : undefined}
-              style={{ background: "#F65F7C" }}
-              onClick={(e) => setColor("#F65F7C")}
-            ></span>
-            <span
-              className={color === "#A358DF" ? "active" : undefined}
-              style={{ background: "#A358DF" }}
-              onClick={(e) => setColor("#A358DF")}
-            ></span>
-            <span
-              className={color === "#0085FF" ? "active" : undefined}
-              style={{ background: "#0085FF" }}
-              onClick={(e) => setColor("#0085FF")}
-            ></span>
-            <span
-              className={color === "#000" ? "active" : undefined}
-              style={{ background: "#000" }}
-              onClick={(e) => setColor("#000")}
-            ></span>
-            <span
-              className={color === "#FFF" ? "active" : undefined}
-              style={{ background: "#FFF" }}
-              onClick={(e) => setColor("#FFF")}
-            ></span>
-          </div>
-
-          <p>
-            <strong>Tools</strong>
-          </p>
-
-          <div className="together">
-            <span
-              className={draw ? "active" : undefined}
-              style={{ background: color }}
-              onClick={(e) => setDraw(true)}
-            >
-              ✎
-            </span>
-            <span
-              className={!draw ? "active" : undefined}
-              style={{ background: color }}
-              onClick={(e) => {
-                setDraw(false);
-                if (range < 15) setRange(15);
-              }}
-            >
-              A
-            </span>
-          </div>
-          <div className="slidecontainer">
-            <input
-              type="range"
-              min="1"
-              max="100"
-              value={range}
-              className="slider"
-              id="myRange"
-              onChange={(e) => setRange(e.target.value)}
-            />
-          </div>
-          {!draw && (
-            <label className="enter-text">
-              <p>
-                <strong>Enter Text</strong>
-              </p>
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              />
-            </label>
-          )}
-          <button onClick={(e) => clearCanvas()}>clear</button>
-          <button onClick={(e) => goBack(e)}>Cancel</button>
-        </div>
-      </div>
+    <Fragment>
       {bg && (
-        <div className="canvas-container">
-          {/* <HiddenButtons setEditImage={null} edited={null} resetImage={null} fullscreen={fullscreen}/> */}
+        <div className="drawing-container" id="draw-container">
+          <div className="draw-side-options">
+            <div>
+              <button type="submit" onClick={() => generateImage()}>
+                Save Image
+              </button>
+              {/* <button onClick={() => undo()}> Undo </button> */}
+              <p>
+                <strong>Colors</strong>
+              </p>
+              <div className="together">
+                <span
+                  className={color === "#F65F7C" ? "active" : undefined}
+                  style={{ background: "#F65F7C" }}
+                  onClick={(e) => setColor("#F65F7C")}
+                ></span>
+                <span
+                  className={color === "#A358DF" ? "active" : undefined}
+                  style={{ background: "#A358DF" }}
+                  onClick={(e) => setColor("#A358DF")}
+                ></span>
+                <span
+                  className={color === "#0085FF" ? "active" : undefined}
+                  style={{ background: "#0085FF" }}
+                  onClick={(e) => setColor("#0085FF")}
+                ></span>
+                <span
+                  className={color === "#000" ? "active" : undefined}
+                  style={{ background: "#000" }}
+                  onClick={(e) => setColor("#000")}
+                ></span>
+                <span
+                  className={color === "#FFF" ? "active" : undefined}
+                  style={{ background: "#FFF" }}
+                  onClick={(e) => setColor("#FFF")}
+                ></span>
+              </div>
 
-          <canvas
-            id="canvasDiv"
-            style={{ background: `url(${bg})` }}
-            width={thisImg.naturalWidth}
-            height={thisImg.naturalHeight}
-            onMouseMove={(e) => move(e)}
-            onTouchMove={(e) => touchMove(e)}
-            onTouchStartCapture={(e) => down(e)}
-            onMouseDown={(e) => down(e)}
-            onTouchStart={(e) => touchDown(e)}
-            onMouseUp={(e) => up(e)}
-            onTouchEnd={(e) => up(e)}
-            onMouseLeave={(e) => up(e)}
-            ref={canvas}
-          />
+              <p>
+                <strong>Tools</strong>
+              </p>
+
+              <div className="together">
+                <span
+                  className={draw ? "active" : undefined}
+                  style={{ background: color }}
+                  onClick={(e) => setDraw(true)}
+                >
+                  ✎
+                </span>
+                <span
+                  className={!draw ? "active" : undefined}
+                  style={{ background: color }}
+                  onClick={(e) => {
+                    setDraw(false);
+                    if (range < 15) setRange(15);
+                  }}
+                >
+                  A
+                </span>
+              </div>
+              <div className="slidecontainer">
+                <input
+                  type="range"
+                  min="1"
+                  max="100"
+                  value={range}
+                  className="slider"
+                  id="myRange"
+                  onChange={(e) => setRange(e.target.value)}
+                />
+              </div>
+              {!draw && (
+                <label className="enter-text">
+                  <p>
+                    <strong>Enter Text</strong>
+                  </p>
+                  <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                  />
+                </label>
+              )}
+              <button onClick={(e) => clearCanvas()}>clear</button>
+              <button onClick={(e) => goBack(e)}>Cancel</button>
+            </div>
+          </div>
+          {bg && (
+            <div className="canvas-container">
+              {/* <HiddenButtons setEditImage={null} edited={null} resetImage={null} fullscreen={fullscreen}/> */}
+
+              <canvas
+                id="canvasDiv"
+                style={{ background: `url(${bg})` }}
+                width={thisImg.naturalWidth}
+                height={thisImg.naturalHeight}
+                onMouseMove={(e) => move(e)}
+                onTouchMove={(e) => touchMove(e)}
+                onTouchStartCapture={(e) => down(e)}
+                onMouseDown={(e) => down(e)}
+                onTouchStart={(e) => touchDown(e)}
+                onMouseUp={(e) => up(e)}
+                onTouchEnd={(e) => up(e)}
+                onMouseLeave={(e) => up(e)}
+                ref={canvas}
+              />
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </Fragment>
   );
 }

@@ -11,10 +11,6 @@ export default function FileUpload({
 }) {
   const [hover, setHover] = useState(null);
 
-  useEffect(() => {
-   console.log(window.clipboardData) 
-  })
-
   const setLink = (e, nosupport = false, image = null) => {
     let data;
     const getExt = e.name.split(".").pop();

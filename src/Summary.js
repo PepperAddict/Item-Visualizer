@@ -104,8 +104,6 @@ export default function Summary({ currentMock }) {
                       edited={edited}
                       resetImage={resetImage}
                       setReady={context.setReady}
-
-
                     />
                     <img
                       style={{

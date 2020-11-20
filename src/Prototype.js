@@ -20,11 +20,7 @@ export default function Prototype(props) {
     const newurl = url.split("/");
     const viewIndex = newurl.indexOf("view");
     const xdId = newurl[viewIndex + 1];
-    const xd = await fetch("https://xdce.adobe.io/v2/document/" + xdId, {
-      headers: {
-        "x-api-key": process.env.XD_API,
-      },
-    });
+    const xd = await fetch("https://talkingcloud.io/api/1/xd-call/?xdid=" + xdId);
     await xd
       .json()
       .then(async (res) => {
@@ -37,7 +33,6 @@ export default function Prototype(props) {
           thumbnail: res.thumbnail.url,
           lastEdited: res.lastupdated,
         };
-        console.log(xdObject);
         setCurrentMock(xdObject);
       })
       .then(() => props.context.setSetup(true));
@@ -47,11 +42,7 @@ export default function Prototype(props) {
     if (service === "Figma") {
       const apiId = `figma-${id}`;
       if (id) {
-        const figma = await fetch(`https://api.figma.com/v1/files/${id}`, {
-          headers: {
-            "X-Figma-Token": process.env.FIGMA_API,
-          },
-        });
+        const figma = await fetch(`https://talkingcloud.io/api/1/figma-call/?figid=${id}`);
         await figma
           .json()
           .then(async (res) => {
