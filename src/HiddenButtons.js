@@ -1,23 +1,20 @@
-import React, { Fragment, useState } from "react";
+import React from "react";
 import fullIcon from "./icon/full.svg";
 
 export default function HiddenButtons(props) {
-  const [showMore, setShowMore] = useState(false);
 
   const editImage = () => {
     props.setEditImage(true)
     props.setReady(false)
   }
   return (
-    <Fragment>
-      {showMore ? (
+
         <div
           className="button-container"
-          onMouseLeave={() => setShowMore(false)}
         >
           <span
             onClick={() => props.fullscreen("generated")}
-            className="expand"
+            className="expand edit-image"
           >
             <img src={fullIcon} alt="fullscreen" />
           </span>
@@ -32,24 +29,12 @@ export default function HiddenButtons(props) {
           )}
           {props.edited === true ? (
             <button
-              className="button-gray reset-button"
+              className="edit-image"
               onClick={() => props.resetImage()}
             >
               ↺
             </button>
           ) : null}
         </div>
-      ) : (
-        <span
-          className="show-more"
-          onMouseEnter={() => setShowMore(true)}
-          onMouseLeave={() => setShowMore(false)}
-          onClick={() => (showMore ? setShowMore(false) : setShowMore(true))}
-        >
-          {" "}
-          <img src={require("./icon/dotshorz.svg")} alt="Show Available Options"/>
-        </span>
-      )}
-    </Fragment>
   );
 }

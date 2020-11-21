@@ -11,13 +11,10 @@ export default function Summary({ currentMock }) {
   const [mock, setmock] = useState(currentMock);
   const [error, setError] = useState(null);
   const [editImage, setEditImage] = useState(null);
-  const [fromThumbnail, setFromThumbnail] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(mock.generatedImage);
   const [newTitle, setNewTitle] = useState(mock.realTitle);
   const [rawImage, setRawImage] = useState(mock.rawImage);
   const [edited, setEdited] = useState(false);
-
-
 
   const resetImage = (e) => {
     if (mock.generatedImage) {
@@ -25,7 +22,9 @@ export default function Summary({ currentMock }) {
       setGeneratedImage(mock.generatedImage);
       setRawImage(mock.rawImage);
     } else if (mock.thumbnail) {
+      setEdited(false)
       setGeneratedImage(null);
+      setRawImage(mock.thumbnail)
     }
   };
 
@@ -99,7 +98,7 @@ export default function Summary({ currentMock }) {
                     }}
                   >
                     <HiddenButtons
-                      fullscreen={fullscreen}
+                      fullscreen={() => fullscreen('thumbnail')}
                       setEditImage={setEditImage}
                       edited={edited}
                       resetImage={resetImage}
@@ -114,6 +113,7 @@ export default function Summary({ currentMock }) {
                       }}
                       alt="thumbnail"
                       src={mock.thumbnail}
+                      id="thumbnail-img"
                     />
                   </div>
                 )}
@@ -179,9 +179,7 @@ export default function Summary({ currentMock }) {
             </Fragment>
           ) : (
             <EditImage
-              fromThumbnail={fromThumbnail}
               setRawImage={setRawImage}
-              setFromThumbnail={setFromThumbnail}
               thumbnail={mock.thumbnail}
               image={rawImage}
               setGeneratedImage={setGeneratedImage}

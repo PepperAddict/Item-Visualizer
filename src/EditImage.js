@@ -25,6 +25,7 @@ export default function EditImage(props) {
   const [context, setContext] = useState(null);
 
   const toDataURL = (url, callback) => {
+    //this is for converting image to blob
     fetch('https://cors-anywhere.herokuapp.com/' + url)
       .then((res) => res.blob())
       .then((response) => {

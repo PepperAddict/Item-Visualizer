@@ -81,11 +81,11 @@ position: relative
 }
 
 .edit-image {
-
     z-index:2;
-    width: 35px;
-    height: 35px;
-
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid #959595;
     background: white;
     display: flex;
     align-items: center;
