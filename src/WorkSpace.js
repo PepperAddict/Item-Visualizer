@@ -3,9 +3,11 @@ import React, { useState, useEffect, Fragment } from "react";
 import { BoardContext } from "./Context";
 import axios from "axios";
 import searchIcon from "./icon/search.svg";
+import FileSent from "./FileSent";
 
 export default function WorkspaceAndItem({ monday, file, setFile, context }) {
   const [items, setItems] = useState(null);
+  const [theStatus, setTheStatus] = useState(null);
 
   const [newItems, setNewItems] = useState(null);
   // const [percent, setUploadPercentage] = useState("0");
@@ -57,17 +59,16 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
 
   const sendFile = async (update_id) => {
     const data = new FormData();
-
     data.append("file", file.file, file.name + file.ext);
     data.append("updateId", update_id);
 
     axios
-      .post("http://localhost:8080/api/1/mupload", data, {
+      .post("https://talkingcloud.io/api/1/mupload", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
         // onUploadProgress: (progressEvent) => {
-        //   //progress bar works great, but it doesn't show upload progress from Monday. This 
+        //   //progress bar works great, but it doesn't show upload progress from Monday. This
         //   //feature is useless at the moment.
         //   setUploadPercentage(Math.round((progressEvent.loaded * 100) / progressEvent.total));
         //   // clear percentage
@@ -75,7 +76,8 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         // },
       })
       .then((res) => {
-        console.log(res)
+        console.log(res);
+        setTheStatus(3);
         //once completed, reset file
         context.setFile(null);
       });
@@ -92,7 +94,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
       }
     }
     //get rid of those spans
-    const hideIt = element.current.querySelectorAll('span')
+    const hideIt = element.current.querySelectorAll("span");
     for (let x of hideIt) {
       x.remove();
     }
@@ -100,16 +102,18 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
     const html = JSON.stringify(element.current.outerHTML);
 
     //create The update with the summary HTML
-
     monday
       .api(`mutation {create_update (item_id: ${e.id}, body: ${html}) {id}}`)
       .then((res) => {
+        setTheStatus(1);
         //Once the update is created, if there is a pending file, upload it!
-        if (file) sendFile(res.data.create_update.id);
+        if (file) {
+          setTheStatus(2);
+          sendFile(res.data.create_update.id);
+        }
       })
       .then(() => {
-        setFile(null);
-        setNewItems(null)
+        setNewItems(null);
         context.setSetup(false);
       });
   };
@@ -119,18 +123,8 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
       {(context) => (
         <div className="workspace-container">
           <div className="workspace-items">
-            {/* {file && (
-                <div className="progress-bar">
-                  <p>File Attached</p>
-                  <div
-                    style={{
-                      width: percent + "%",
-                      height: "3px",
-                      background: "#00C875",
-                    }}
-                  />
-                </div>
-              )} */}
+            <FileSent status={theStatus} setStatus={setTheStatus} />
+
             <label>
               <strong>Send Update to</strong>
               {context.setup && context.ready ? (
@@ -162,7 +156,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
                       {item.name}
                     </button>
                   );
-                }) }
+                })}
               </div>
             )}
           </div>

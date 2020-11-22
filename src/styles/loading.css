@@ -96,3 +96,14 @@
       transform: translate(24px, 0);
     }
   }
+
+
+.status {
+  animation-name: enter;
+  animation-duration: .5s;
+}
+
+@keyframes enter {
+  from {right: -200px}
+  to {right: 0}
+}
