@@ -114,7 +114,7 @@ export default function RecordSelf(props) {
     const iFrameData = {
       type: "Video",
       iframe: src,
-      realTitle: "Recorded Video of Self",
+      realTitle: "Recorded Video",
       generatedImage: null,
       thumbnail: null,
       url: null,

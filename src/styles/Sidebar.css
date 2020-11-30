@@ -88,9 +88,17 @@
   align-items: center;
   text-align: left;
 }
+.navi img {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
 
 ul {
   list-style: none;
+  padding: 0px;
 }
 nav {
   text-align: left;
@@ -101,17 +109,30 @@ li {
   padding: 10px;
   cursor: pointer;
   min-width: 100px;
+  display: flex;
+  grid-gap: 10px;
+  align-items: center;
 }
 li:hover {
   color: #0085ff;
+}
+
+li img {
+  border: 1px solid #ccc;
+}
+
+li:hover img {
+  border: 0px;
+  filter: brightness(0) invert(1);
 }
 .how-button {
   display: block;
   width: 100%;
   text-align: end;
-  padding: 30px;
+  padding: 10px 30px 0px;
   box-sizing: border-box;
   cursor: pointer;
+  text-transform: uppercase
 }
 .how-button:hover {
   color: #0085ff;

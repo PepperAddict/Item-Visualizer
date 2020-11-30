@@ -76,10 +76,13 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         // },
       })
       .then((res) => {
-        console.log(res);
         setTheStatus(3);
         //once completed, reset file
         context.setFile(null);
+      })
+      .catch((err) => {
+        console.log(err)
+        setTheStatus(4);
       });
   };
 
@@ -115,6 +118,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
       .then(() => {
         setNewItems(null);
         context.setSetup(false);
+        context.setNav('welcome')
       });
   };
 

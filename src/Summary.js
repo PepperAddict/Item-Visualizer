@@ -124,7 +124,7 @@ export default function Summary({ currentMock }) {
                     gridRowGap: "5px",
                   }}
                 >
-                  <h1>Summary</h1>
+                  <span><h1>Summary</h1></span>
                   <label style={{ display: "flex" }}>
                     <p style={{ marginRight: "10px", width: "60px" }}>
                       <strong>Title:</strong>
