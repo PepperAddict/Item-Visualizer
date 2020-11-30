@@ -1,161 +1,150 @@
-
 .App {
-    background: white;
-    color: #323338;
+  background: white;
+  color: #323338;
+}
 
-  }
+button[type="submit"] {
+  background: #0085ff;
+  color: white;
+}
+button[type="submit"]:hover {
+  background: #0071d9;
+}
+.summary-container textarea {
+  background: white;
+  border: 1px solid #c5c7d0;
+}
+.workspace-items input {
+  border: 1px solid #c5c7d0;
+}
+.input-container {
+  background: white;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.17);
+}
 
-  button[type="submit"] {
-    background: #0085ff;
-    color: white;
+.workspace-items button {
+  border: 1px solid #e6e9ef;
+  background: white;
+}
+.container {
+  background: #f5f6f8;
+  box-sizing: border-box;
+}
 
-  }
-  button[type="submit"]:hover {
-    background: #0071D9;
-  }
-  .summary-container textarea {
-    background: white;
-    border: 1px solid #c5c7d0;
-  }
-  .workspace-items input {
-    border: 1px solid #c5c7d0;
-  }
-  .input-container {
+.button-mode label {
+  color: #0085ff;
+  border-bottom: 2px solid #e6e9ef;
+  color: #676879;
+}
 
-    background: white;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.17);
+.button-mode label.active {
+  border-bottom: 2px solid #0085ff;
+  color: #0085ff;
+}
+.button-mode-real label.active {
+  background: #dff0ff;
+}
+h3 {
+  color: #323338;
+}
 
-  }
-  
-  .workspace-items button {
-    border: 1px solid #e6e9ef;
-    background: white;
-  }
-  .container {
-    background: #f5f6f8;
-    box-sizing: border-box;
-  }
+.button-mode label:hover {
+  background: #0085ff;
+  color: white;
+  border-bottom: 2px solid #0085ff;
+  transition: 0.2s;
+}
 
-  .button-mode label {
-    color: #0085ff;
-    border-bottom: 2px solid #E6E9EF;
-    color: #676879;
-  }
+.button-active {
+  color: #0085ff;
+}
+.button-active img {
+  filter: invert(38%) sepia(90%) saturate(4540%) hue-rotate(215deg)
+    brightness(100%) contrast(103%);
+  border: 0px;
+}
+.draw-side-options span {
+  border: 1px solid #e8e8e8;
+}
+.draw-side-options span.active {
+  box-shadow: 2px 2px 10px #999;
+  border: 2px solid #fff;
+}
 
-  
-  .button-mode label.active {
-    border-bottom: 2px solid #0085ff;
-    color: #0085ff;
-  }
-  .button-mode-real label.active {
-    background: #DFF0FF;
-  }
-  h3 {
-    color: #323338;
-  }
-  
-  .button-mode label:hover {
-    background: #0085ff;
-    color: white;
-    border-bottom: 2px solid #0085ff;
-    transition: .2s;
-  }
+.how-to-button {
+  text-decoration: none;
+  transition: .2s;
+  color: black;
+}
+.how-to-button:hover {
+  color: #0085ff;
+}
 
+.button-blue {
+  background: #0085ff;
+}
+a {
+  color: #0085ff;
+}
 
-  .button-active {
-    color: #0085ff;
-  }
-  .button-active img {
-    filter: invert(38%) sepia(90%) saturate(4540%) hue-rotate(215deg) brightness(100%) contrast(103%);
-    border: 0px;
-  }
-  .draw-side-options span {
-    border: 1px solid #e8e8e8;
-  }
-  .draw-side-options span.active {
-    box-shadow: 2px 2px 10px #999;
-    border: 2px solid #fff;
-  }
-  
-  .how-to-button {
-    text-decoration: none;
-    color: black;
-  }
-  
-  .button-blue {
-    background: #0085ff;
-  }
-  a {
-    color: #0085ff;
-  }
-  
-
-  
 .draw-side-options button {
   background: #0085ff;
 }
-  .input-link input {
-    border: 1px solid #c5c7d0;
-  }
-  
-  textarea:hover,
-  input:hover {
-    border: 1px solid #323338;
-  }
-  
-  textarea:focus,
-  input:focus {
-    border: 1px solid #0085ff;
-  }
-  video.inactive {
-    border: 1px solid #ccc;
-  }
+.input-link input {
+  border: 1px solid #c5c7d0;
+}
 
-  
-  nav {
-    border-top: 1px solid #e6e9ef;
-  }
-  nav ul li:hover {
-    background: #0085FF;
-      color: white;
+textarea:hover,
+input:hover {
+  border: 1px solid #323338;
+}
 
-  
-  }
-  
-  .App-header {
-    background-color: #282c34;
-    color: white;
-  }
-  
-  .App-link {
-    color: #61dafb;
-  }
-  
+textarea:focus,
+input:focus {
+  border: 1px solid #0085ff;
+}
+video.inactive {
+  border: 1px solid #ccc;
+}
 
-  
-  .error-message {
-    background: #e44258;
-    color: white;
+nav {
+  border-top: 1px solid #e6e9ef;
+}
+nav ul li:hover {
+  background: #0085ff;
+  color: white;
+}
 
-  }
-  .error-message::before {
+.App-header {
+  background-color: #282c34;
+  color: white;
+}
 
-    color: #e44258;
-    background: white;
-  }
+.App-link {
+  color: #61dafb;
+}
 
-  .how-big-container {
-    background: #E6E9EF;
-  }
+.error-message {
+  background: #e44258;
+  color: white;
+}
+.error-message::before {
+  color: #e44258;
+  background: white;
+}
 
-  .drag-drop-zone {
-    background: #E6E9EF;
-  }
-  .drag-drop-zone.active {
-    background: #DFF0FF;
-    box-shadow: inset 0px 0px 10px #C5C7D0;
-  }
+.how-big-container {
+  background: #e6e9ef;
+}
 
-  .video-container {
-    background: white;
-  }
+.drag-drop-zone {
+  background: #e6e9ef;
+}
+.drag-drop-zone.active {
+  background: #dff0ff;
+  box-shadow: inset 0px 0px 10px #c5c7d0;
+}
+
+.video-container {
+  background: white;
+}

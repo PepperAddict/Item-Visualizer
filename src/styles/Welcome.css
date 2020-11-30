@@ -210,12 +210,23 @@
   color: #666972;
   border: 1px solid #E6E9EF;
 }
+
+.how-notice {
+  text-align: left;
+  max-width: 570px;
+  margin: auto;
+  height: auto;
+  display: block;
+}
+.how-notice a {
+  text-decoration: none;
+}
   .how-container {
     display: flex;
     position: relative;
     text-align: left;
     max-width: 650px;
-    height: 100%;
+    height: auto;
     margin: auto;
     padding: 10px;
     box-sizing: border-box;

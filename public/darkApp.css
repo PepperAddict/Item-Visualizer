@@ -1,42 +1,43 @@
 .App {
-    color: white;
-    background: #363a52;
-  }
-  .workspace-items button {
-      background: rgba(255, 255, 255, 0.2);
-      border: 0px;
-      color: white;
-  }
-  nav {
-    background: rgba(0, 0, 0, 0.2);
-  }
-  input, textarea {
-    background: rgba(0, 0, 0, 0.2);
-    color: white;
-    border: 1px solid #c5c7d0;
-  }
-  button[type=submit] {
-    background: #0085FF;
-    color: white;
-  }
-  .input-link input {
-    border: 1px solid #676879;
-  }
+  color: white;
+  background: #363a52;
+}
+.workspace-items button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 0px;
+  color: white;
+}
+nav {
+  background: rgba(0, 0, 0, 0.2);
+}
+input,
+textarea {
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border: 1px solid #c5c7d0;
+}
+button[type="submit"] {
+  background: #0085ff;
+  color: white;
+}
+.input-link input {
+  border: 1px solid #676879;
+}
 
-  textarea:hover,
-  input:hover {
-    border: 1px solid #fff;
-  }
-  
-  textarea:focus,
-  input:focus {
-    border: 1px solid #0085ff;
-  }
+textarea:hover,
+input:hover {
+  border: 1px solid #fff;
+}
 
-  .container {
-    background: #1c1f3b;
-    box-sizing: border-box;
-  }
+textarea:focus,
+input:focus {
+  border: 1px solid #0085ff;
+}
+
+.container {
+  background: #1c1f3b;
+  box-sizing: border-box;
+}
 .title-container {
   background: rgba(0, 0, 0, 0.1);
 }
@@ -48,105 +49,114 @@
   border: 2px solid #1e1e1e;
 }
 
-
-  .button-active {
-    background: rgba(0, 0, 0, 0.2);
-    color: #0085FF
-  }
-  img {
-    width: 100%
-  }
-  
-  .button-blue {
-    background: #0085FF;
-  }
-  a {
-    color: #0085FF
-  }
-  
-
-
-
-  video.inactive {
-    border: 1px solid #ccc;
-  }
-
-  
-  .App-header {
-    background-color: #282c34;
-    color: white;
-  }
-  
-  .App-link {
-    color: #61dafb;
-  }
-  
-  .input-container {
-
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.17);
+.button-active {
+  background: rgba(0, 0, 0, 0.2);
+  color: #0085ff;
 }
-  
-  .error-message {
-    background: #E44258;
-    color: white;
-  }
-  .error-message::before {
-    content: "!";
-    color: #E44258;
-    background: white;
-  }
-    
+img {
+  width: 100%;
+}
+
+.button-blue {
+  background: #0085ff;
+}
+a {
+  color: #0085ff;
+}
+
+video.inactive {
+  border: 1px solid #ccc;
+}
+
+.App-header {
+  background-color: #282c34;
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.input-container {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.17);
+}
+
+.error-message {
+  background: #e44258;
+  color: white;
+}
+.error-message::before {
+  content: "!";
+  color: #e44258;
+  background: white;
+}
+
 .draw-side-options button {
-  background: #0085FF;
+  background: #0085ff;
 }
 
-  
-  /* loading   */
-  
+/* loading   */
 
-  .lds-ellipsis div {
- 
-    background: #fff;
-    animation-timing-function: cubic-bezier(0, 1, 1, 0);
-  }
+.lds-ellipsis div {
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
 
-  .how-big-container {
-    background: rgba(0, 0, 0, 0.6)
-  }
+.how-big-container {
+  background: rgba(0, 0, 0, 0.6);
+}
 
+.button-mode label {
+  color: #0085ff;
+  border-bottom: 2px solid #323338 !important;
+  color: #676879;
+}
 
+.button-mode label.active {
+  border-bottom: 2px solid #0085ff !important;
+  color: #0085ff;
+  background: none;
+}
 
-  .button-mode label {
-    color: #0085ff;
-    border-bottom: 2px solid #323338 !important;
-    color: #676879;
-  }
+.drag-drop-zone {
+  background: rgba(0, 0, 0, 0.2);
+}
 
-  
-  .button-mode label.active {
-    border-bottom: 2px solid #0085ff !important;
-    color: #0085ff;
-    background: none;
-  }
+.drag-drop-zone.active {
+  background: black;
+}
 
-  .drag-drop-zone {
-    background: rgba(0, 0, 0, 0.2);
-  }
+.video-container {
+  background: rgba(255, 255, 255, 0.05);
+}
 
-  .drag-drop-zone.active {
-    background: black;
-  }
+.button-mode-real label.active {
+  background: #dff0ff;
+}
 
-  .video-container {
-    background: rgba(255, 255, 255, 0.05);
-  }
+.button-mode-real label:hover {
+  background: #e6e9ef;
+  transition: 0.2s;
+}
 
-  .button-mode-real label.active {
-    background: #DFF0FF;
-  }
+.how-to-button {
+  text-decoration: none;
+  color: white;
+  transition: .2s;
+}
 
-  .button-mode-real label:hover {
-    background: #E6E9EF;
-    transition: .2s;
-  }
+.navi img {
+  filter: brightness(100%) invert(1)
+}
+.navi li:hover img {
+  filter: invert(38%) sepia(90%) saturate(4540%) hue-rotate(215deg)
+  brightness(100%) contrast(103%);
+  border: 0px;
+}
+
+.button-active img {
+  filter: invert(38%) sepia(90%) saturate(4540%) hue-rotate(215deg)
+    brightness(100%) contrast(103%);
+  border: 0px;
+}
