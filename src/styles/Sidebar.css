@@ -132,7 +132,8 @@ li:hover img {
   padding: 10px 30px 0px;
   box-sizing: border-box;
   cursor: pointer;
-  text-transform: uppercase
+  text-transform: uppercase;
+  text-decoration: none;
 }
 .how-button:hover {
   color: #0085ff;

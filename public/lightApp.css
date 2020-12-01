@@ -58,6 +58,7 @@ h3 {
 .button-active {
   color: #0085ff;
 }
+
 .button-active img {
   filter: invert(38%) sepia(90%) saturate(4540%) hue-rotate(215deg)
     brightness(100%) contrast(103%);

@@ -4,41 +4,42 @@ Welcome to Item Visualizer
 
 Item Visualizer is a Monday View app to help explain your item better with various methods you could choose from. 
 
-I am PepperAddict and I am a web developer who enjoys working remotely. 
+I am PepperAddict and I am a fullstack developer who enjoys working remotely. 
 A question I keep asking is: “How can I get my team to understand me better?” 
 
 This Monday app should help solve that without a separate software or service. 
+
+Please visit the homepage to learn more!
+
+https://itemvisualizer.com/[Item Visualization Website]
+
+== Installation
+
+Click on the button below to install your app into your Monday's View.
+
+image::https://dapulse-res.cloudinary.com/image/upload/f_auto,q_auto/remote_mondaycom_static/uploads/Tal/4b5d9548-0598-436e-a5b6-9bc5f29ee1d9_Group12441.png[link="https://auth.monday.com/oauth2/authorize?client_id=c402136ecfc3e375135e5002cb9ebaa0&response_type=install"]
+
+If you have further questions on how to install and use, visit our documentation:
+
+https://itemvisualizer.com/#/how[Item Visualization Documentation]
 
 == Getting started 
 
 To start this app make sure you: 
 
 * `npm install` or `yarn install` to get all the necessary dependencies 
-* Insert your API Keys for Figma and Adobe XD fetches if you want to retrieve their data.
-
-** For Figma: src/Prototype.js line 52 where it says `X-Figma-Token`: insert your own Figma token
-*** Getting your own figma api key is free and instant: https://www.figma.com/developers/api#authentication
-** For Adobe XD: src/Prototype.js line 24 where it says `x-api-key`: insert your own Adobe XD cloud token. 
-*** Getting an Adobe XD api key is free, but not instant: https://adobexdplatform.com/cloud-content-api-docs/
-
-* The backend is hosted on heroku: https://www.talkingcloud.io/  The backend generates a screenshot using https://www.npmjs.com/package/puppeteer[puppeteer magic] and sends in the update directly to your Monday's item. 
-Feel free to host your own if you like: 
-** Source code for backend: https://github.com/PepperAddict/monday-backend
-** enter your own Monday apikey in `server/middleware/mondayupload.js` line 51 `Authorization:`
-** If you do host your own backend, make sure to change the route here in `src/Prototype.js` line 93, `src/Screenshot.js` line 24, and `src/Workspace.js` line 65
-
 * `npm start` or `yarn start` is enough to get started to get a server running at `localhost:3000`
 
-* Host it with ngrok as a custom URL for testing on Monday or `yarn build` to build your own Monday view app. Up to you. 
+* Host it with ngrok as a custom URL for testing on Monday or `yarn build` to build your own Monday view app. 
 
 
 == The app
 
-This app is to help others explain using pictures, files, or videos. The options are out there. To see a brief overview: 
+This app is to help others explain using pictures, files, or videos. To see a brief overview: 
 
-video::579VsWvkZRk[youtube]
-If the video doesn't play, here's the link: https://youtu.be/579VsWvkZRk[youtube link]
+video::9CP0eiwuVIc[youtube]
+If the video doesn't play, here's the link: https://youtu.be/9CP0eiwuVIc[youtube link]
 
 
-If you have any questions or concerns or want to contribute, please create an issue and I'll look into it or you can email me directly to jenearly@gmail.com
+If you have any questions or concerns or want to contribute, you can email me directly to jenearly@gmail.com
 
