@@ -75,13 +75,16 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         //   setTimeout(() => setUploadPercentage(0), 10000);
         // },
       })
+      .then(() => {
+        window.open("https://talkingcloud.io/api/1/mupload", "_blank");
+      })
       .then((res) => {
         setTheStatus(3);
         //once completed, reset file
         context.setFile(null);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         setTheStatus(4);
       });
   };
@@ -118,9 +121,10 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
       .then(() => {
         setNewItems(null);
         context.setSetup(false);
-        context.setNav('welcome')
+        context.setNav("welcome");
       });
   };
+
 
   return (
     <BoardContext.Consumer>
@@ -128,7 +132,6 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         <div className="workspace-container">
           <div className="workspace-items">
             <FileSent status={theStatus} setStatus={setTheStatus} />
-
             <label>
               <strong>Send Update to</strong>
               {context.setup && context.ready ? (
