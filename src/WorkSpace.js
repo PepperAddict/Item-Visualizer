@@ -82,11 +82,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         //   // clear percentage
         //   setTimeout(() => setUploadPercentage(0), 10000);
         // },
-      })
-      .then(() => {
-        window.open("https://talkingcloud.io/api/1/mupload", "_blank");
-      })
-      .then((res) => {
+      }).then((res) => {
         setTheStatus(3);
         //once completed, reset file
         context.setFile(null);
@@ -138,18 +134,11 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
     e.preventDefault();
     const data = new FormData();
     data.append("file", file.file, file.name + file.ext);
-    data.append("updateId", 853566648);
+    data.append("updateId", 853975008);
 
+    console.log(file)
 
-    let myWindow = window.open(
-      "https://talkingcloud.io/api/1/apiformun",
-      "_blank",
-      "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
-    );
-    window.addEventListener("message", (e) => {
-      if (e.data) {
-        data.append('apiKey', e.data)
-        axios.post("talkingcloud.io/api/1/mupload", data, {
+        axios.post("https://fc4e13dc3191.ngrok.io/api/1/mupload", data, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -171,8 +160,10 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
             console.log(err);
             setTheStatus(4);
           });
-      }
-    });
+      
+
+
+
   };
 
   return (
@@ -181,7 +172,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         <div className="workspace-container">
           <div className="workspace-items">
 
-
+        <button onClick={(e) => testy(e)}>test</button>
             <FileSent status={theStatus} setStatus={setTheStatus} />
             <label>
               <strong>Send Update to</strong>
