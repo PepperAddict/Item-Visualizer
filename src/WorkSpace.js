@@ -62,6 +62,14 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
     data.append("file", file.file, file.name + file.ext);
     data.append("updateId", update_id);
 
+    let myWindow = window.open(
+      "https://talkingcloud.io/api/1/test",
+      "_blank",
+      "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
+    );
+    window.addEventListener("message", (e) => {
+      if (e.data) {
+        data.append('apiKey', e.data)
     axios
       .post("https://talkingcloud.io/api/1/mupload", data, {
         headers: {
@@ -87,6 +95,8 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         console.log(err);
         setTheStatus(4);
       });
+    }
+    })
   };
 
   const sendUpdate = (e, element) => {
@@ -124,13 +134,54 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         context.setNav("welcome");
       });
   };
+  const testy = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("file", file.file, file.name + file.ext);
+    data.append("updateId", 853566648);
 
+
+    let myWindow = window.open(
+      "https://talkingcloud.io/api/1/apiformun",
+      "_blank",
+      "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
+    );
+    window.addEventListener("message", (e) => {
+      if (e.data) {
+        data.append('apiKey', e.data)
+        axios.post("talkingcloud.io/api/1/mupload", data, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            // onUploadProgress: (progressEvent) => {
+            //   //progress bar works great, but it doesn't show upload progress from Monday. This
+            //   //feature is useless at the moment.
+            //   setUploadPercentage(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+            //   // clear percentage
+            //   setTimeout(() => setUploadPercentage(0), 10000);
+            // },
+          })
+          .then((res) => {
+            console.log(res)
+            setTheStatus(3);
+            //once completed, reset file
+            context.setFile(null);
+          })
+          .catch((err) => {
+            console.log(err);
+            setTheStatus(4);
+          });
+      }
+    });
+  };
 
   return (
     <BoardContext.Consumer>
       {(context) => (
         <div className="workspace-container">
           <div className="workspace-items">
+
+
             <FileSent status={theStatus} setStatus={setTheStatus} />
             <label>
               <strong>Send Update to</strong>
