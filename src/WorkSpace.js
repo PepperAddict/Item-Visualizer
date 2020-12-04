@@ -63,7 +63,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
     data.append("updateId", update_id);
 
     let myWindow = window.open(
-      "https://talkingcloud.io/api/1/test",
+      "https://talkingcloud.io/api/1/apiformun",
       "_blank",
       "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
     );
@@ -172,7 +172,7 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         <div className="workspace-container">
           <div className="workspace-items">
 
-        <button onClick={(e) => testy(e)}>test</button>
+        {/* <button onClick={(e) => testy(e)}>test</button> */}
             <FileSent status={theStatus} setStatus={setTheStatus} />
             <label>
               <strong>Send Update to</strong>
