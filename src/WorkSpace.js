@@ -4,8 +4,9 @@ import { BoardContext } from "./Context";
 import axios from "axios";
 import searchIcon from "./icon/search.svg";
 import FileSent from "./FileSent";
+let mWindow;
 
-export default function WorkspaceAndItem({ monday, file, setFile, context }) {
+export default function WorkspaceAndItem({ monday, file, context }) {
   const [items, setItems] = useState(null);
   const [theStatus, setTheStatus] = useState(null);
 
@@ -57,10 +58,11 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
     setNewItems(newarray.slice(0, 5));
   };
   const sendItIn = (data) => {
-
     return axios.post("https://talkingcloud.io/api/1/mupload", data, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": '*',
+          "Access-Control-Allow-Method": 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
         },
         // onUploadProgress: (progressEvent) => {
         //   //progress bar works great, but it doesn't show upload progress from Monday. This
@@ -71,57 +73,58 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         // },
       })
       .then((res) => {
+        console.log(res.data);
         if (res.data.errors) {
-          window.open(
+          localStorage.removeItem('forUpdate')
+          setTheStatus(5)
+          mWindow = window.open(
             "https://talkingcloud.io/api/1/apiformun",
             "_blank",
             "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
           );
+        } else {
+          setTheStatus(3);
+          context.setFile(null);
+          context.setSetup(false);
+          context.setNav("welcome");
         }
-        setTheStatus(3);
-        //once completed, reset file
-        context.setFile(null);
-      })
-      .then(() => {
-        context.setSetup(false);
-        context.setNav("welcome");
       })
       .catch((err) => {
-        sessionStorage.remoteItem('forUpdate')
+        localStorage.removeItem("forUpdate");
         console.log(err);
         setTheStatus(4);
       });
   };
 
   const sendFile = async (update_id) => {
+    console.log(update_id)
     const data = new FormData();
     data.append("file", file.file, file.name + file.ext);
     data.append("updateId", update_id);
-    let theKey;
 
-    if (!sessionStorage.getItem("forUpdate")) {
-      window.open(
+    if (!localStorage.getItem("forUpdate")) {
+      setTheStatus(5)
+      mWindow = window.open(
         "https://talkingcloud.io/api/1/apiformun",
         "_blank",
         "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
       );
     } else {
-      theKey = sessionStorage.getItem('forUpdate')
-      console.log(theKey)
-      data.append("apiKey", theKey)
-      sendItIn(data)
+
+      data.append("apiKey", localStorage.getItem("forUpdate"));
+      sendItIn(data);
     }
 
-
     window.addEventListener("message", (e) => {
-      if (e.data) {
-        theKey = e.data
+      if (typeof e.data === "string") {
+        mWindow.close();
         data.append("apiKey", e.data);
-        sessionStorage.setItem("forUpdate", e.data);
+        localStorage.setItem("forUpdate", e.data);
+        console.log(e.data)
         sendItIn(data);
       }
-    });
 
+    });
   };
 
   const sendUpdate = (e, element) => {
