@@ -30,9 +30,9 @@ export default function ({ context }) {
               width="560"
               height="315"
               src="https://www.youtube.com/embed/9CP0eiwuVIc"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              allowFullScreen
             ></iframe>
           </div>
         ) : context.play === 1 ? (
@@ -42,9 +42,9 @@ export default function ({ context }) {
               width="560"
               height="315"
               src="https://www.youtube.com/embed/b_IXUVyQL4o"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              allowFullScreen
             ></iframe>
           </div>
         ) : context.play === 2 ? (
@@ -54,9 +54,9 @@ export default function ({ context }) {
               width="560"
               height="315"
               src="https://www.youtube.com/embed/q5DJc0kNPcs"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              allowFullScreen
             ></iframe>
           </div>
         ) : context.play === 3 ? (
@@ -66,9 +66,9 @@ export default function ({ context }) {
               width="560"
               height="315"
               src="https://www.youtube.com/embed/LalyTRtJuWo"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              allowFullScreen
             ></iframe>
           </div>
         ) : null}

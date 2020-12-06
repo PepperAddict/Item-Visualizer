@@ -56,22 +56,9 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
 
     setNewItems(newarray.slice(0, 5));
   };
+  const sendItIn = (data) => {
 
-  const sendFile = async (update_id) => {
-    const data = new FormData();
-    data.append("file", file.file, file.name + file.ext);
-    data.append("updateId", update_id);
-
-    let myWindow = window.open(
-      "https://talkingcloud.io/api/1/apiformun",
-      "_blank",
-      "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
-    );
-    window.addEventListener("message", (e) => {
-      if (e.data) {
-        data.append('apiKey', e.data)
-    axios
-      .post("https://talkingcloud.io/api/1/mupload", data, {
+    return axios.post("https://talkingcloud.io/api/1/mupload", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -82,17 +69,59 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         //   // clear percentage
         //   setTimeout(() => setUploadPercentage(0), 10000);
         // },
-      }).then((res) => {
+      })
+      .then((res) => {
+        if (res.data.errors) {
+          window.open(
+            "https://talkingcloud.io/api/1/apiformun",
+            "_blank",
+            "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
+          );
+        }
         setTheStatus(3);
         //once completed, reset file
         context.setFile(null);
       })
+      .then(() => {
+        context.setSetup(false);
+        context.setNav("welcome");
+      })
       .catch((err) => {
+        sessionStorage.remoteItem('forUpdate')
         console.log(err);
         setTheStatus(4);
       });
+  };
+
+  const sendFile = async (update_id) => {
+    const data = new FormData();
+    data.append("file", file.file, file.name + file.ext);
+    data.append("updateId", update_id);
+    let theKey;
+
+    if (!sessionStorage.getItem("forUpdate")) {
+      window.open(
+        "https://talkingcloud.io/api/1/apiformun",
+        "_blank",
+        "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
+      );
+    } else {
+      theKey = sessionStorage.getItem('forUpdate')
+      console.log(theKey)
+      data.append("apiKey", theKey)
+      sendItIn(data)
     }
-    })
+
+
+    window.addEventListener("message", (e) => {
+      if (e.data) {
+        theKey = e.data
+        data.append("apiKey", e.data);
+        sessionStorage.setItem("forUpdate", e.data);
+        sendItIn(data);
+      }
+    });
+
   };
 
   const sendUpdate = (e, element) => {
@@ -130,49 +159,12 @@ export default function WorkspaceAndItem({ monday, file, setFile, context }) {
         context.setNav("welcome");
       });
   };
-  const testy = (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("file", file.file, file.name + file.ext);
-    data.append("updateId", 853975008);
-
-    console.log(file)
-
-        axios.post("https://fc4e13dc3191.ngrok.io/api/1/mupload", data, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            // onUploadProgress: (progressEvent) => {
-            //   //progress bar works great, but it doesn't show upload progress from Monday. This
-            //   //feature is useless at the moment.
-            //   setUploadPercentage(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-            //   // clear percentage
-            //   setTimeout(() => setUploadPercentage(0), 10000);
-            // },
-          })
-          .then((res) => {
-            console.log(res)
-            setTheStatus(3);
-            //once completed, reset file
-            context.setFile(null);
-          })
-          .catch((err) => {
-            console.log(err);
-            setTheStatus(4);
-          });
-      
-
-
-
-  };
 
   return (
     <BoardContext.Consumer>
       {(context) => (
         <div className="workspace-container">
           <div className="workspace-items">
-
-        {/* <button onClick={(e) => testy(e)}>test</button> */}
             <FileSent status={theStatus} setStatus={setTheStatus} />
             <label>
               <strong>Send Update to</strong>
