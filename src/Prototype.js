@@ -283,7 +283,34 @@ export default function Prototype(props) {
 
               <div className="show-support">
                 <strong>Supports:</strong>
-                <img src={support} alt="supports" />
+                <div className="item-support">
+                  <span className="tooltip">
+                    <img src={require('./icon/supports1.png')} alt="supports XD" />
+                    <span className="tooltiptext">Adobe XD</span>
+                  </span>
+                  <span className="tooltip">
+                    <img src={require('./icon/supports2.png')} alt="supports Anima" />
+                    <span className="tooltiptext">Anima</span>
+                  </span>
+                  <span className="tooltip">
+                    <img src={require('./icon/supports3.png')} alt="supports Figma" />
+                    <span className="tooltiptext">Figma</span>
+                  </span>
+                  <span className="tooltip">
+                    <img src={require('./icon/supports4.png')} alt="supports Invision" />
+                    <span className="tooltiptext">Invision</span>
+                  </span>
+                  <span className="tooltip">
+                    <img src={require('./icon/supports5.png')} alt="supports Google Drive" />
+                    <span className="tooltiptext">Google Drive</span>
+                  </span>
+                  <span className="tooltip">
+                    <img src={require('./icon/supports6.png')} alt="supports Image Links" />
+                    <span className="tooltiptext">Image Links</span>
+                  </span>
+                  
+                </div>
+                
               </div>
             </form>
           ) : attachment === "upload" ? (

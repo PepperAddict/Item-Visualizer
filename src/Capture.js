@@ -9,6 +9,7 @@ export default function Capture(props) {
   const [width, setWidth] = useState(800);
   const [initiated, setInitiated] = useState(false);
   const [globalStream, setStream] = useState(null);
+  const [taken, setTaken] = useState(false);
 
   const canny = useRef(null);
   const [src] = useState(null);
@@ -29,31 +30,42 @@ export default function Capture(props) {
   });
 
   const camera = (constraintObj) => {
-    navigator.mediaDevices
-      .getUserMedia(constraintObj)
-      .then((stream) => {
-        let video = vidEle.current;
-        setStream(stream);
-        if ("srcObject" in video) {
-          video.srcObject = stream;
-        } else {
-          let vid = [];
-          vid.push(stream);
-          video.src = window.URL.createObjectURL(vid);
-        }
-        stream.getVideoTracks()[0].onended = () => {
+    try {
+      navigator.mediaDevices
+        .getUserMedia(constraintObj)
+        .then((stream) => {
+          let video = vidEle.current;
+          setStream(stream);
+          if ("srcObject" in video) {
+            video.srcObject = stream;
+          } else {
+            let vid = [];
+            vid.push(stream);
+            video.src = window.URL.createObjectURL(vid);
+          }
+          stream.getVideoTracks()[0].onended = () => {
+            setInitiated(false);
+            stream.getTracks().forEach(function (track) {
+              track.stop();
+            });
+          };
+          video.onloadedmetadata = (ev) => {
+            video.play();
+          };
+        })
+        .catch((err) => {
+          if (err.name === "NotAllowedError") {
+            setError("Please Grant Permission to Use Microphone and Camera");
+          } else {
+            setError("Something went wrong");
+          }
           setInitiated(false);
-          stream.getTracks().forEach(function (track) {
-            track.stop();
-          });
-        };
-        video.onloadedmetadata = (ev) => {
-          video.play();
-        };
-      })
-      .catch((err) => {
-        setInitiated(false);
-      });
+        });
+    } catch (err) {
+      setError("Something went wrong");
+      setInitiated(false);
+      console.log(err);
+    }
   };
 
   const desktop = (constraintObj) => {
@@ -69,7 +81,12 @@ export default function Capture(props) {
           vid.push(stream);
           video.src = window.URL.createObjectURL(vid);
         }
+        let { width, height } = stream.getTracks()[0].getSettings();
         stream.getVideoTracks()[0].onended = () => {
+          if (!taken) {
+            console.log("captured");
+            capture(false, width, height);
+          }
           setInitiated(false);
           stream.getTracks().forEach(function (track) {
             track.stop();
@@ -88,8 +105,8 @@ export default function Capture(props) {
 
   const startRecord = (where = "camera") => {
     setInitiated(true);
+    setTaken(false)
     let constraintObj;
-
     switch (where) {
       case "environment":
         constraintObj = {
@@ -130,6 +147,7 @@ export default function Capture(props) {
   const stop = (e) => {
     if (globalStream) {
       globalStream.getTracks().forEach((track) => {
+        
         track.stop();
         setInitiated(false);
       });
@@ -138,13 +156,24 @@ export default function Capture(props) {
     setInitiated(false);
   };
 
-  const capture = (e) => {
+  const captureReal = (w = null, h = null) => {
     canny.current
-      .getContext("2d")
-      .drawImage(vidEle.current, 0, 0, width, height);
-    canny.current.toBlob((blob) => {
-      setCaptured(blob);
-    });
+    .getContext("2d")
+    .drawImage(vidEle.current, 0, 0, w ? w : width, h ? h : height);
+
+  canny.current.toBlob((blob) => {
+    setCaptured(blob);
+  });
+  }
+  const capture = (e = false, w = null, h = null) => {
+    if (e === true) {
+      setTaken(true)
+      captureReal(w, h)
+    } 
+    if (taken === false) {
+      captureReal(w,h)
+    }
+
   };
 
   const sendIt = (e) => {
@@ -166,7 +195,7 @@ export default function Capture(props) {
     props.setFile(thefile);
     props.setCurrentMock(iFrameData);
     props.setSetup(true);
-    props.context.setReady(true)
+    props.context.setReady(true);
   };
 
   const fullscreen = () => {
@@ -177,31 +206,30 @@ export default function Capture(props) {
     }
   };
   const goHere = () => {
-    window.open('https://itemvisualizer.com/#/how#initialize', '_blank')
-  }
+    window.open("https://itemvisualizer.com/#/how#initialize", "_blank");
+  };
 
   return (
     <div className="video-capture-container">
       {error && (
-        <p className="error-message" onClick={() => setError(false)}>
+        <p className="error-message" onClick={() => setError(null)}>
           {error}
-          <span className="go-here" onClick={() => goHere()}>?</span>
+          <span className="go-here tooltip" onClick={() => goHere()}>
+            ?<span className="tooltiptext">Troubleshoot</span>
+          </span>
         </p>
       )}
       <h3>Snap a screenshot using your screen or camera.</h3>
       <div className="video-options">
         {initiated ? (
           <div className="initiate">
-
             <span className="split">
               <button className="button-red" onClick={() => stop()}>
                 <span className="fontawesome-remove"></span>
                 Stop Camera
               </button>
-              <button className="button-blue" onClick={() => capture()}>
-                <span className="fontawesome-circle-blank">
-
-                </span>
+              <button className="button-blue" onClick={() => capture(true)}>
+                <span className="fontawesome-circle-blank"></span>
                 Capture
               </button>
             </span>
@@ -228,20 +256,24 @@ export default function Capture(props) {
         ) : (
           <div className="initiate">
             <span className="split">
-              <button
-                className={captured ? "button-gray" : "button-blue"}
-                onClick={() => startRecord("desktop")}
-              >
-                <span class="fontawesome-desktop"></span>
-                Screen
-              </button>
+
+
               <button
                 className={captured ? "button-gray" : "button-blue"}
                 onClick={() => startRecord("camera")}
               >
-                <span class="fontawesome-camera"></span>
+                <span className="fontawesome-camera"></span>
                 Camera
               </button>
+              <button
+                className={captured ? "button-gray" : "button-blue"}
+                onClick={() => startRecord("desktop")}
+              >
+                <span className="fontawesome-desktop"></span>
+                Screen
+              </button>
+
+
             </span>
           </div>
         )}
@@ -260,22 +292,20 @@ export default function Capture(props) {
       <div className="limit">
         {captured && (
           <Fragment>
-                     <HiddenButtons
-            fullscreen={fullscreen}
-            setEditImage={null}
-            edited={null}
-            resetImage={null}
-          /> 
-        <div className="final">
-          <button className="button-blue" onClick={() => sendIt()}>
-            <span className="fontawesome-ok"></span>
-            Save and Continue
-          </button>
-        </div>
+            <HiddenButtons
+              fullscreen={fullscreen}
+              setEditImage={null}
+              edited={null}
+              resetImage={null}
+            />
+            <div className="final">
+              <button className="button-blue" onClick={() => sendIt()}>
+                <span className="fontawesome-ok"></span>
+                Save and Continue
+              </button>
+            </div>
           </Fragment>
-
         )}
-
 
         <canvas ref={canny} width={width} height={height} />
       </div>

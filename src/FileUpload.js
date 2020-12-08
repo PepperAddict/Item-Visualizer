@@ -193,9 +193,9 @@ export default function FileUpload({
         onPaste={(e) => handlePaste(e)}
         onCopy={(e) => handlePaste(e)}
       >
-        Drag or
+        Drag, paste, or
         <label>
-          Choose
+          choose
           <input
             type="file"
             id="myFile"

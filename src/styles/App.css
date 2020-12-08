@@ -146,6 +146,29 @@ nav ul li:hover {
 .button-mode label {
   background: none;
 }
+.tooltip {
+  position: relative;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: #E6E9EF;
+  color: black;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ font-size: .8rem;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1; 
+  top: 110%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 
  .expand {
   cursor: pointer;

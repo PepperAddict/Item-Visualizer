@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Fragment } from "react";
 import Summary from "./Summary";
 import "./styles/Video.css";
 let mediaRecorder;
@@ -10,6 +10,7 @@ export default function RecordSelf(props) {
   const [thestream, setthestream] = useState(null);
   const [vid, setVid] = useState(null);
   const [error, setError] = useState(null);
+  const [mute, setMute] = useState(false);
   const [isMobile] = useState(() => {
     let check = false;
     (() => {
@@ -97,7 +98,7 @@ export default function RecordSelf(props) {
 
           newStream.addTrack(videoStream);
           newStream.addTrack(audioStream);
-          
+
           setthestream(newStream);
 
           let video = vidEle.current;
@@ -117,14 +118,13 @@ export default function RecordSelf(props) {
 
           mediaEverything(newStream);
         } catch (err) {
-          stream.getTracks().forEach(track=> track.stop())
+          stream.getTracks().forEach((track) => track.stop());
           setRecording(false);
-          if (err.name === 'NotAllowedError') {
-            setError("Please Grant Permission to Use Microphone and Camera")
+          if (err.name === "NotAllowedError") {
+            setError("Please Grant Permission to Use Microphone and Camera");
           } else {
             setError("Something went wrong");
           }
-          
         }
       })
       .catch((err) => {
@@ -203,8 +203,8 @@ export default function RecordSelf(props) {
         mediaEverything(stream);
       })
       .catch((err) => {
-        if (err.name === 'NotAllowedError') {
-          setError("Please Grant Permission to Use Microphone and Camera")
+        if (err.name === "NotAllowedError") {
+          setError("Please Grant Permission to Use Microphone and Camera");
         } else {
           setError("Something went wrong");
         }
@@ -213,8 +213,17 @@ export default function RecordSelf(props) {
   };
 
   const goHere = () => {
-    window.open('https://itemvisualizer.com/#/how#initialize', '_blank')
-  }
+    window.open("https://itemvisualizer.com/#/how#initialize", "_blank");
+  };
+  const muteMe = () => {
+    if (thestream && !mute) {
+      setMute(true);
+      thestream.getAudioTracks()[0].enabled = false;
+    } else if (thestream && mute) {
+      setMute(false);
+      thestream.getAudioTracks()[0].enabled = true;
+    }
+  };
 
   return (
     <div className="video-big-container">
@@ -225,11 +234,14 @@ export default function RecordSelf(props) {
           {error && (
             <p className="error-message" onClick={() => setError(null)}>
               {error}
-              <span className="go-here" onClick={() => goHere()}>?</span>
+              <span className="go-here tooltip" onClick={() => goHere()}>
+                ?
+                <span className="tooltiptext">Troubleshoot</span>
+              </span>
             </p>
           )}
 
-          <h2>Show a Video</h2>
+          <h2>Show the Video</h2>
           <h3>Initiate and Record a video.</h3>
           {recording ? (
             <button className="button-red" onClick={() => stopRecord()}>
@@ -282,14 +294,34 @@ export default function RecordSelf(props) {
               )}
             </div>
           )}
-          <video
-            ref={vidEle}
-            className={src ? null : "inactive"}
-            autoPlay
-            src={src && src}
-            muted
-          />
-          {props.file && <a href={props.file}>Download</a>}
+
+          <div className="mute-vid-dl">
+            <video
+              ref={vidEle}
+              className={src ? null : "inactive"}
+              autoPlay
+              src={src && src}
+              muted
+            />
+            {thestream && (
+              <button className="button-round tooltip" onClick={() => muteMe()}>
+                {mute ? (
+                  <Fragment>
+                  <img src={require("./icon/mic-slash.svg")} />
+                  <span className="tooltiptext">press to unmute</span>
+                  </Fragment>
+
+                ) : (
+                  <Fragment>
+                    <img src={require("./icon/mic.svg")} />
+                    <span className="tooltiptext">press to mute</span>
+                  </Fragment>
+                  
+                )}
+              </button>
+            )}
+            {src && <a href={src} download><button className="button-blue">Download Video</button></a>}
+          </div>
         </div>
       )}
     </div>
