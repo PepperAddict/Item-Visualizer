@@ -33,6 +33,13 @@ export default function RecordSelf(props) {
       mediaRecorder.ondataavailable = (ev) => {
         chunks.push(ev.data);
       };
+
+      if (!mute) {
+        stream.getAudioTracks()[0].enabled = true;
+      } else if (mute) {
+        stream.getAudioTracks()[0].enabled = false;
+      }
+
       stream.getVideoTracks()[0].onended = () => {
         stream.getTracks().forEach(function (track) {
           track.stop();
@@ -215,12 +222,12 @@ export default function RecordSelf(props) {
   const goHere = () => {
     window.open("https://itemvisualizer.com/#/how#initialize", "_blank");
   };
-  const muteMe = () => {
+  const muteMe = (e) => {
     if (thestream && !mute) {
-      setMute(true);
+      setMute(e);
       thestream.getAudioTracks()[0].enabled = false;
     } else if (thestream && mute) {
-      setMute(false);
+      setMute(e);
       thestream.getAudioTracks()[0].enabled = true;
     }
   };
@@ -304,7 +311,7 @@ export default function RecordSelf(props) {
               muted
             />
             {thestream && (
-              <button className="button-round tooltip" onClick={() => muteMe()}>
+              <button className="button-round tooltip" onClick={() => mute ? muteMe(false) : muteMe(true)}>
                 {mute ? (
                   <Fragment>
                   <img src={require("./icon/mic-slash.svg")} />
