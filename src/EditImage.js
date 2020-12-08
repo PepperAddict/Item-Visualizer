@@ -87,7 +87,12 @@ export default function EditImage(props) {
     for (var i = 0; i < clickX.length; i++) {
       context.beginPath();
       context.moveTo(clickX[i - 1], clickY[i - 1]);
-      context.fillText(text, clickX[i], clickY[i]);
+      let lines = text.split('\n')
+      let lineheight = 15
+      for (var j = 0; j<lines.length; j++)  {
+        context.fillText(lines[j], clickX[i], clickY[i] + (j * lineheight));
+      }
+      
       context.closePath();
       context.stroke();
     }

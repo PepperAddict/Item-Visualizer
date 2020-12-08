@@ -15,60 +15,74 @@ export default function Prototype(props) {
 
   const [attachment, setattachment] = useState("url");
 
-  const xdCommunication = async ( url, name) => {
+  const xdCommunication = async (url, name) => {
     //get XD's ID from the URL
     const newurl = url.split("/");
     const viewIndex = newurl.indexOf("view");
     const xdId = newurl[viewIndex + 1];
-    const xd = await fetch("https://talkingcloud.io/api/1/xd-call/?xdid=" + xdId);
-    await xd
-      .json()
-      .then(async (res) => {
-        const xdObject = {
-          type: name,
-          id: xdId,
-          realTitle: res.name + " by " + res.publisher.displayName,
-          url,
-          iframe: null,
-          thumbnail: res.thumbnail.url,
-          lastEdited: res.lastupdated,
-        };
-        setCurrentMock(xdObject);
-      })
-      .then(() => props.context.setSetup(true));
+    try {
+      const xd = await fetch(
+        "https://talkingcloud.io/api/1/xd-call/?xdid=" + xdId
+      );
+      await xd
+        .json()
+        .then(async (res) => {
+          const xdObject = {
+            type: name,
+            id: xdId,
+            realTitle: res.name + " by " + res.publisher.displayName,
+            url,
+            iframe: null,
+            thumbnail: res.thumbnail.url,
+            lastEdited: res.lastupdated,
+          };
+          setCurrentMock(xdObject);
+        })
+        .then(() => props.context.setSetup(true));
+    } catch (err) {
+      setError("XD URL may be private or doesn't exist");
+    }
   };
 
   const figmaCommunication = async (service, id) => {
-    if (service === "Figma") {
-      const apiId = `figma-${id}`;
-      if (id) {
-        const figma = await fetch(`https://talkingcloud.io/api/1/figma-call/?figid=${id}`);
-        await figma
-          .json()
-          .then(async (res) => {
-            const figmaFile = "https://figma.com/file/" + id;
+    try {
+      if (service === "Figma") {
+        const apiId = `figma-${id}`;
+        if (id) {
+          const figma = await fetch(
+            `https://talkingcloud.io/api/1/figma-call/?figid=${id}`
+          );
+          await figma
+            .json()
+            .then(async (res) => {
+              if (res.status === 404) {
+                setError("The Figma page does not exist");
+              } else {
+                const figmaFile = "https://figma.com/file/" + id;
 
-            const figmaObject = {
-              type: service,
-              id: apiId,
-              realTitle: res.name,
-              iframe: null,
-              url: figmaFile,
-              thumbnail: res.thumbnailUrl,
-              lastEdited: res.lastModified,
-            };
-            setCurrentMock(figmaObject);
-          })
-          .then(() => {
-            props.context.setSetup(true);
-          })
-          .catch(() => {
-            setError("Sorry, something went wrong. Please try again.");
-            setLoading(false);
-          });
-      } else {
-        console.log("Sorry, could not find an ID");
+                const figmaObject = {
+                  type: service,
+                  id: apiId,
+                  realTitle: res.name,
+                  iframe: null,
+                  url: figmaFile,
+                  thumbnail: res.thumbnailUrl,
+                  lastEdited: res.lastModified,
+                };
+                setCurrentMock(figmaObject);
+                props.context.setSetup(true);
+              }
+            })
+            .catch(() => {
+              setError("Sorry, something went wrong. Please try again.");
+              setLoading(false);
+            });
+        } else {
+          console.log("Sorry, could not find an ID");
+        }
       }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -83,7 +97,7 @@ export default function Prototype(props) {
     };
     const talkingImage = `https://talkingcloud.io/api/1/play/?url=${url}&mode=${apicall.mode}&full=${apicall.full}`;
     try {
-      fetch(talkingImage, {signal: controller.signal})
+      fetch(talkingImage, { signal: controller.signal })
         .then((res) => res.blob())
         .then(async (image) => {
           var imageUrl = URL.createObjectURL(image);
@@ -285,32 +299,48 @@ export default function Prototype(props) {
                 <strong>Supports:</strong>
                 <div className="item-support">
                   <span className="tooltip">
-                    <img src={require('./icon/supports1.png')} alt="supports XD" />
+                    <img
+                      src={require("./icon/supports1.png")}
+                      alt="supports XD"
+                    />
                     <span className="tooltiptext">Adobe XD</span>
                   </span>
                   <span className="tooltip">
-                    <img src={require('./icon/supports2.png')} alt="supports Anima" />
+                    <img
+                      src={require("./icon/supports2.png")}
+                      alt="supports Anima"
+                    />
                     <span className="tooltiptext">Anima</span>
                   </span>
                   <span className="tooltip">
-                    <img src={require('./icon/supports3.png')} alt="supports Figma" />
+                    <img
+                      src={require("./icon/supports3.png")}
+                      alt="supports Figma"
+                    />
                     <span className="tooltiptext">Figma</span>
                   </span>
                   <span className="tooltip">
-                    <img src={require('./icon/supports4.png')} alt="supports Invision" />
+                    <img
+                      src={require("./icon/supports4.png")}
+                      alt="supports Invision"
+                    />
                     <span className="tooltiptext">Invision</span>
                   </span>
                   <span className="tooltip">
-                    <img src={require('./icon/supports5.png')} alt="supports Google Drive" />
+                    <img
+                      src={require("./icon/supports5.png")}
+                      alt="supports Google Drive"
+                    />
                     <span className="tooltiptext">Google Drive</span>
                   </span>
                   <span className="tooltip">
-                    <img src={require('./icon/supports6.png')} alt="supports Image Links" />
+                    <img
+                      src={require("./icon/supports6.png")}
+                      alt="supports Image Links"
+                    />
                     <span className="tooltiptext">Image Links</span>
                   </span>
-                  
                 </div>
-                
               </div>
             </form>
           ) : attachment === "upload" ? (
