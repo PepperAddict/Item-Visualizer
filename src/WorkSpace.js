@@ -73,7 +73,6 @@ export default function WorkspaceAndItem({ monday, file, context }) {
         // },
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data.errors) {
           localStorage.removeItem('forUpdate')
           setTheStatus(5)
@@ -97,7 +96,6 @@ export default function WorkspaceAndItem({ monday, file, context }) {
   };
 
   const sendFile = async (update_id) => {
-    console.log(update_id)
     const data = new FormData();
     data.append("file", file.file, file.name + file.ext);
     data.append("updateId", update_id);
@@ -120,7 +118,6 @@ export default function WorkspaceAndItem({ monday, file, context }) {
         mWindow.close();
         data.append("apiKey", e.data);
         localStorage.setItem("forUpdate", e.data);
-        console.log(e.data)
         sendItIn(data);
       }
 

@@ -128,6 +128,7 @@ export default function RecordDesktop(props) {
         mediaEverything(newStream);
       })
       .catch((err) => {
+        console.log(err)
         setRecording(false);
         setError('Something went wrong')
       });

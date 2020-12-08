@@ -176,12 +176,16 @@ export default function Capture(props) {
       closeFullscreen();
     }
   };
+  const goHere = () => {
+    window.open('https://itemvisualizer.com/#/how#initialize', '_blank')
+  }
 
   return (
     <div className="video-capture-container">
       {error && (
         <p className="error-message" onClick={() => setError(false)}>
           {error}
+          <span className="go-here" onClick={() => goHere()}>?</span>
         </p>
       )}
       <h3>Snap a screenshot using your screen or camera.</h3>

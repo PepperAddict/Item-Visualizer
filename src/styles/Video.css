@@ -33,6 +33,20 @@
     color: white;
     height: 40px;
 }
+.go-here {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    padding: 5px;
+    background: white;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    position: absolute;
+    right: 10px;
+}
 
 .button-blue {
     background: #0085FF;

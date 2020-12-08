@@ -297,6 +297,7 @@ export default function Prototype(props) {
             <Capture
               setCurrentMock={setCurrentMock}
               setSetup={props.context.setSetup}
+              context={props.context}
               setFile={props.context.setFile}
               setErr={setError}
             />
