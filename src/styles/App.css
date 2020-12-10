@@ -179,6 +179,20 @@ nav ul li:hover {
   z-index: 2;
   box-sizing: border-box;
 }
+.tip {
+  font-size: 0.8rem;
+  margin: 5px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.tip::before {
+  content: "TIP:";
+  padding: 10px;
+  border-radius: 50%;
+  font-weight: 800;
+
+}
  .expand img {
   width: 100%;
   height: 100%;

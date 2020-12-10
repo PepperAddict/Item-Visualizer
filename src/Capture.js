@@ -1,10 +1,11 @@
-import React, { useRef, useState, Fragment } from "react";
+import React, { useRef, useState, Fragment, useEffect } from "react";
 
 import "./styles/Video.css";
 import { closeFullscreen, openFullscreen } from "./utils";
 import HiddenButtons from "./HiddenButtons";
 export default function Capture(props) {
   const vidEle = useRef(null);
+  const videoBehind = useRef(null);
   const [height, setHeight] = useState(800);
   const [width, setWidth] = useState(800);
   const [initiated, setInitiated] = useState(false);
@@ -15,6 +16,43 @@ export default function Capture(props) {
   const [src] = useState(null);
   const [error, setError] = useState(null);
   const [captured, setCaptured] = useState(null);
+
+  const sayStuff = (stream = globalStream, ini = initiated) => {
+
+      if (ini) {
+        let { width, height } = stream.getTracks()[0].getSettings();
+        navigator.mediaSession.setActionHandler("play", async function () {
+          capture(true, width, height);
+        });
+
+        navigator.mediaSession.setActionHandler("pause", function () {
+          capture(true, width, height);
+        });
+      }
+    
+  };
+
+  useEffect(() => {
+    videoBehind.current.src = require("./logofast.mp4");
+    videoBehind.current
+      .play()
+      .then((_) => {
+        navigator.mediaSession.metadata = new window.MediaMetadata({
+          title: "Waiting for Camera or Desktop",
+          artist: "Item Visualizer",
+          artwork: [
+            {
+              src: require("./icon/itemIcon.png"),
+              sizes: "96x96",
+              type: "image/png",
+            },
+          ],
+        });
+        sayStuff(null, false)
+      })
+      .catch((error) => console.log(error.message));
+  }, [videoBehind]);
+
   const [isMobile] = useState(() => {
     let check = false;
     (() => {
@@ -34,6 +72,7 @@ export default function Capture(props) {
       navigator.mediaDevices
         .getUserMedia(constraintObj)
         .then((stream) => {
+          setInitiated(true)
           let video = vidEle.current;
           setStream(stream);
           if ("srcObject" in video) {
@@ -45,12 +84,27 @@ export default function Capture(props) {
           }
           stream.getVideoTracks()[0].onended = () => {
             setInitiated(false);
+
             stream.getTracks().forEach(function (track) {
               track.stop();
             });
           };
           video.onloadedmetadata = (ev) => {
-            video.play();
+            video.play().then(() => {
+              setInitiated(true)
+              navigator.mediaSession.metadata = new window.MediaMetadata({
+                title: "Camera Capture",
+                artist: "Item Visualizer",
+                artwork: [
+                  {
+                    src: require("./icon/itemIcon.png"),
+                    sizes: "96x96",
+                    type: "image/png",
+                  },
+                ],
+              });
+              sayStuff(stream, true);
+            });
           };
         })
         .catch((err) => {
@@ -79,21 +133,42 @@ export default function Capture(props) {
         } else {
           let vid = [];
           vid.push(stream);
+          video.srcObject = stream;
           video.src = window.URL.createObjectURL(vid);
         }
-        let { width, height } = stream.getTracks()[0].getSettings();
         stream.getVideoTracks()[0].onended = () => {
-          if (!taken) {
-            console.log("captured");
-            capture(false, width, height);
-          }
+          // if (!taken) {
+          //removed feature for now as it automatically screenshots upon close
+          //   console.log("captured");
+          //   capture(false, width, height);
+          // }
           setInitiated(false);
           stream.getTracks().forEach(function (track) {
             track.stop();
           });
         };
+
         video.onloadedmetadata = (ev) => {
-          video.play();
+          
+          video.play().then(() => {
+            setInitiated(true)
+
+            navigator.mediaSession.metadata = new window.MediaMetadata({
+              title: "Screen Capture",
+              artist: "Item Visualizer",
+              artwork: [
+                {
+                  src: require("./icon/itemIcon.png"),
+                  sizes: "96x96",
+                  type: "image/png",
+                },
+              ],
+            });
+
+              sayStuff(stream, true);
+
+            
+          });
         };
       })
       .catch((err) => {
@@ -105,7 +180,7 @@ export default function Capture(props) {
 
   const startRecord = (where = "camera") => {
     setInitiated(true);
-    setTaken(false)
+    setTaken(false);
     let constraintObj;
     switch (where) {
       case "environment":
@@ -145,11 +220,11 @@ export default function Capture(props) {
     setWidth(vidEle.current.videoWidth);
   };
   const stop = (e) => {
+
     if (globalStream) {
+      vidEle.current.srcObject = null
       globalStream.getTracks().forEach((track) => {
-        
-        track.stop();
-        setInitiated(false);
+        track.stop()
       });
     }
 
@@ -157,23 +232,26 @@ export default function Capture(props) {
   };
 
   const captureReal = (w = null, h = null) => {
-    canny.current
-    .getContext("2d")
-    .drawImage(vidEle.current, 0, 0, w ? w : width, h ? h : height);
+    try {
+      canny.current
+        .getContext("2d")
+        .drawImage(vidEle.current, 0, 0, w ? w : width, h ? h : height);
 
-  canny.current.toBlob((blob) => {
-    setCaptured(blob);
-  });
-  }
+      canny.current.toBlob((blob) => {
+        setCaptured(blob);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const capture = (e = false, w = null, h = null) => {
     if (e === true) {
-      setTaken(true)
-      captureReal(w, h)
-    } 
-    if (taken === false) {
-      captureReal(w,h)
+      setTaken(true);
+      captureReal(w, h);
     }
-
+    if (taken === false) {
+      captureReal(w, h);
+    }
   };
 
   const sendIt = (e) => {
@@ -219,7 +297,7 @@ export default function Capture(props) {
           </span>
         </p>
       )}
-      <h3>Snap a screenshot using your screen or camera.</h3>
+      <h3>Capture a screenshot from your camera or screen.</h3>
       <div className="video-options">
         {initiated ? (
           <div className="initiate">
@@ -256,8 +334,6 @@ export default function Capture(props) {
         ) : (
           <div className="initiate">
             <span className="split">
-
-
               <button
                 className={captured ? "button-gray" : "button-blue"}
                 onClick={() => startRecord("camera")}
@@ -272,12 +348,22 @@ export default function Capture(props) {
                 <span className="fontawesome-desktop"></span>
                 Screen
               </button>
-
-
             </span>
           </div>
         )}
       </div>
+      <video
+        loop
+        autoPlay
+        src={require("./logofast.mp4")}
+        controls
+        ref={videoBehind}
+        style={{ visibility: "hidden", position: "fixed" }}
+      />
+      <span className="tip">
+        While streaming, press your play/pause key on your keyboard to snap a
+        screenshot.
+      </span>
       <video
         ref={vidEle}
         className={src ? null : "inactive"}
@@ -288,6 +374,7 @@ export default function Capture(props) {
         autoPlay
         src={src && src}
         muted
+        controls
       />
       <div className="limit">
         {captured && (
