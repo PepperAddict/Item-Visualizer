@@ -322,9 +322,10 @@ export default function RecordSelf(props) {
       });
   };
 
-  const goHere = () => {
-    window.open("https://itemvisualizer.com/#/how#initialize", "_blank");
+  const goHere = (name) => {
+    window.open(`https://itemvisualizer.com/#/how#${name}`, "_blank");
   };
+
   const muteMe = (e) => {
     if (thestream && !mute) {
       setMute(e);
@@ -422,6 +423,9 @@ export default function RecordSelf(props) {
             <p className="quick-alert">Video Size Limit: 20MB <br/>
             While streaming, press your play/pause media key on your
              keyboard to end your recording. 
+             <span className="go-here tooltip" onClick={() => goHere('media-keys')}>
+            ?<span className="tooltiptext">Learn more about Media Keys</span>
+          </span>
           </p>
 
 

@@ -14,18 +14,20 @@ export default function WorkspaceAndItem({ monday, file, context }) {
   // const [percent, setUploadPercentage] = useState("0");
 
   const localstorage = (method, key, value = null) =>  {
+    let name;
     try {
       switch(method) {
         case 'get': 
-          localStorage.getItem(key);
+          name = localStorage.getItem(key);
           break;
         case 'set':
-          localStorage.setItem(key, value);
+          name = localStorage.setItem(key, value);
           break;
         case 'remove':
-          localStorage.removeItem(key);
+          name = localStorage.removeItem(key);
           break;
       }
+      return name;
     } catch(err) {
       console.log(err)
     }
@@ -110,8 +112,9 @@ export default function WorkspaceAndItem({ monday, file, context }) {
     data.append("file", file.file, file.name + file.ext);
     data.append("updateId", update_id);
 
+    let alreadyKey = localstorage('get', 'forUpdate')
 
-      if (!localstorage('get',"forUpdate")) {
+      if (!alreadyKey) {
         setTheStatus({code: 'red', message: "Please Authenticate"});
         mWindow = window.open(
           "https://talkingcloud.io/api/1/apiformun",
