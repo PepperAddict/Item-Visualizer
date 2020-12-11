@@ -28,6 +28,14 @@ export default function RecordSelf(props) {
   let chunks = [];
 
   useEffect(() => {
+    return () => {
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     videoBehind.current.src = require("./logofast.mp4");
     videoBehind.current.volume = 1;
     videoBehind.current
@@ -92,10 +100,13 @@ export default function RecordSelf(props) {
           track.stop();
         });
       };
+
       mediaRecorder.onstop = (ev) => {
         let blob = new Blob(chunks, { type: "video/mp4" });
         let kb = blob.size / 1024;
         kb = Number(kb.toFixed(2));
+
+        try {
         if (kb > 20000) {
           let size = blob.size;
           setError(
@@ -116,6 +127,7 @@ export default function RecordSelf(props) {
         setVid(blob);
 
         let video = vidEle.current;
+
         if ("srcObject" in video) {
           video.srcObject = thestream;
         } else {
@@ -148,6 +160,11 @@ export default function RecordSelf(props) {
         });
 
         setthestream(null);
+        } catch(err) {
+          console.log(err)
+        }
+
+
       };
     } catch (err) {
       console.log(err);

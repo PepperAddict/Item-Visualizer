@@ -29,6 +29,16 @@ export default function Capture(props) {
       });
     }
   };
+  useEffect(() => {
+    return () => {
+
+      if (globalStream) {
+        globalStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+      }
+    }
+  }, [globalStream])
 
   useEffect(() => {
     videoBehind.current.src = require("./logofast.mp4");
