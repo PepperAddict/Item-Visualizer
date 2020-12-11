@@ -5,7 +5,7 @@
   grid-template-columns: 1fr auto;
   height: 100vh;
   font-family: "Roboto", sans-serif;
-  word-break: break-all;
+  word-break: keep-all;
   outline: 0px;
 }
 @media screen and (max-width: 850px) {
@@ -148,22 +148,38 @@ nav ul li:hover {
 }
 .tooltip {
   position: relative;
+  cursor: help;
 }
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 150px;
-  background-color: #E6E9EF;
-  color: black;
+  background-color: #323338;
+  color: white;
   text-align: center;
-  padding: 5px 0;
+  padding: 5px;
   border-radius: 6px;
- font-size: .8rem;
-  /* Position the tooltip text - see examples below! */
+  font-size: .8rem;
   position: absolute;
-  z-index: 1; 
-  top: 110%;
+  z-index: 1;
+  top: 120%;
   left: 50%;
-  margin-left: -60px;
+  margin-left: -75px;
+  box-sizing: border-box;
+  hyphens: none;
+  word-break: keep-all;
+}
+.tooltip .tooltiptext:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-bottom-color: #323338;
+  border-top: 0;
+  margin-left: -10px;
+  margin-top: -10px;
 }
 
 .tooltip:hover .tooltiptext {
@@ -183,15 +199,11 @@ nav ul li:hover {
   font-size: 0.8rem;
   margin: 5px;
   display: block;
-  width: 100%;
   box-sizing: border-box;
-}
-.tip::before {
-  content: "TIP:";
-  padding: 10px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
-  font-weight: 800;
-
+  border: 0px;
 }
  .expand img {
   width: 100%;

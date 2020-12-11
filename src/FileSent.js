@@ -1,14 +1,21 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 
 export default function FileSent({ status, setStatus }) {
+
+
+  useEffect(() => {
+    setTimeout(function(){ 
+      setStatus(null)
+     }, 10000);
+  })
     
   return (
     <Fragment>
       {status && (
-        <div onClick={() => setStatus(null)} className={status === 1 || status === 3 ?"status success" : (status === 2) ? "status sending" : (status === 4 || status=== 5) && "status error"}>
-          {status === 1 ? "Update Created" : status === 2 ? 
+        <div onClick={() => setStatus(null)} className={status.code === 'green' ? "status success" : (status.code === 'yellow') ? "status sending" : (status.code === 'red') && "status error"}>
+          {status.code === 'green' ? status.message : status.code === 'yellow' ? 
                   <div className="status sending">
-                  File Sending
+                  {status.message}
                   <span className="lds-ellipsis">
                     <div></div>
                     <div></div>
@@ -16,7 +23,7 @@ export default function FileSent({ status, setStatus }) {
                     <div></div>
                   </span>
                 </div>
-                 : (status === 3) ? "File attached": (status === 4) ? "There was a problem" : (status===5) && "Not Authenticated" }<span className="x">×</span>
+                : (status.code === 'red') && status.message  }<span className="x">×</span>
         </div>
       ) }
     </Fragment>

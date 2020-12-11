@@ -64,11 +64,11 @@ export default function FileUpload({
     const imageFile = file;
     let size = file.size / 1024;
     let kb = parseFloat(size.toFixed(2));
-    let numb = 500000;
+    let numb = 20000;
     numb.toFixed(2);
 
     if (kb > numb) {
-      setErr("Sorry, file exceeds 500 MB size limit");
+      setErr("Sorry, file exceeds 20 MB size limit");
     } else {
       switch (newfile) {
         case "image/png":
@@ -205,7 +205,7 @@ export default function FileUpload({
         </label>
         a file to upload
       </div>
-      <p className="quick-alert">Size limit: 500 MB</p>
+      <p className="quick-alert">Size limit: 20 MB</p>
     </form>
   );
 }

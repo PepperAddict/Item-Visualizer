@@ -1,28 +1,32 @@
 .quick-alert {
-    background: #DFF0FF;
-    border-radius: 15px;
-    padding: 15px;
-    grid-column: 1 / -1;
-    box-sizing: border-box;
-    position: relative;
-    font-size: 18px;
-    color: #323338;
+  background: #DFF0FF;
+  border-radius: 15px;
+  padding: 15px;
+  grid-column: 1 / -1;
+  box-sizing: border-box;
+  position: relative;
+  color: #323338;
+  padding-left: 60px;
+  font-size: 1rem;
 }
 
 .quick-alert::before {
-    content: 'i';
-    background: #0085FF;
-    padding: 20px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    left: 0px;
-    height: 15px;
-    width: 15px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    margin-right: 15px;
+  content: 'i';
+  background: #0085FF;
+  padding: 20px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  height: 15px;
+  width: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 15px;
+  position: absolute;
+  left: 10px;
+  transform: translateY(-50%);
+  top: 50%;
 }
 .quick-alert button {
   align-self: end;

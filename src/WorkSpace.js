@@ -13,6 +13,24 @@ export default function WorkspaceAndItem({ monday, file, context }) {
   const [newItems, setNewItems] = useState(null);
   // const [percent, setUploadPercentage] = useState("0");
 
+  const localstorage = (method, key, value = null) =>  {
+    try {
+      switch(method) {
+        case 'get': 
+          localStorage.getItem(key);
+          break;
+        case 'set':
+          localStorage.setItem(key, value);
+          break;
+        case 'remove':
+          localStorage.removeItem(key);
+          break;
+      }
+    } catch(err) {
+      console.log(err)
+    }
+
+  }
   useEffect(() => {
     monday.listen(["settings", "context"], async (res) => {
       if (res.data.boardIds) {
@@ -58,69 +76,67 @@ export default function WorkspaceAndItem({ monday, file, context }) {
     setNewItems(newarray.slice(0, 5));
   };
   const sendItIn = (data) => {
-    return axios.post("https://talkingcloud.io/api/1/mupload", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Access-Control-Allow-Origin": '*',
-          "Access-Control-Allow-Method": 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-        },
-        // onUploadProgress: (progressEvent) => {
-        //   //progress bar works great, but it doesn't show upload progress from Monday. This
-        //   //feature is useless at the moment.
-        //   setUploadPercentage(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-        //   // clear percentage
-        //   setTimeout(() => setUploadPercentage(0), 10000);
-        // },
-      })
+
+    return axios.post('https://talkingcloud.io/api/1/mupload', data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
+    })
       .then((res) => {
         if (res.data.errors) {
-          localStorage.removeItem('forUpdate')
-          setTheStatus(5)
+            localstorage('remove', 'forUpdate')
+
+          setTheStatus({code: 'red', message: "Please Authenticate"});
           mWindow = window.open(
             "https://talkingcloud.io/api/1/apiformun",
             "_blank",
             "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
           );
         } else {
-          setTheStatus(3);
+          setTheStatus({code: 'green', message: "File Attached"});
           context.setFile(null);
           context.setSetup(false);
           context.setNav("welcome");
         }
       })
       .catch((err) => {
-        localStorage.removeItem("forUpdate");
-        console.log(err);
-        setTheStatus(4);
+        localstorage('remove',"forUpdate");
+        console.dir(err);
+        setTheStatus({code: 'red', message: "Something went wrong"});
       });
   };
-
   const sendFile = async (update_id) => {
     const data = new FormData();
     data.append("file", file.file, file.name + file.ext);
     data.append("updateId", update_id);
 
-    if (!localStorage.getItem("forUpdate")) {
-      setTheStatus(5)
-      mWindow = window.open(
-        "https://talkingcloud.io/api/1/apiformun",
-        "_blank",
-        "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
-      );
-    } else {
 
-      data.append("apiKey", localStorage.getItem("forUpdate"));
-      sendItIn(data);
-    }
+      if (!localstorage('get',"forUpdate")) {
+        setTheStatus({code: 'red', message: "Please Authenticate"});
+        mWindow = window.open(
+          "https://talkingcloud.io/api/1/apiformun",
+          "_blank",
+          "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
+        );
+      } else {
+        data.append("apiKey", localstorage('get', "forUpdate"));
+        sendItIn(data);
+      }
+
 
     window.addEventListener("message", (e) => {
       if (typeof e.data === "string") {
         mWindow.close();
         data.append("apiKey", e.data);
-        localStorage.setItem("forUpdate", e.data);
+        setTheStatus({code: "yellow", message: "Uploading File"});
+        try {
+          localStorage.setItem("forUpdate", e.data);
+        } catch(err) {
+          console.log(err)
+        }
+
         sendItIn(data);
       }
-
     });
   };
 
@@ -146,10 +162,10 @@ export default function WorkspaceAndItem({ monday, file, context }) {
     monday
       .api(`mutation {create_update (item_id: ${e.id}, body: ${html}) {id}}`)
       .then((res) => {
-        setTheStatus(1);
+        setTheStatus({code: "green", message: "Update Created"});
         //Once the update is created, if there is a pending file, upload it!
         if (file) {
-          setTheStatus(2);
+          setTheStatus({code: "yellow", message: "Uploading File"});
           sendFile(res.data.create_update.id);
         }
       })

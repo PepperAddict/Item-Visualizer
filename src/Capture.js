@@ -11,25 +11,23 @@ export default function Capture(props) {
   const [initiated, setInitiated] = useState(false);
   const [globalStream, setStream] = useState(null);
   const [taken, setTaken] = useState(false);
-
+  const [hideTip, setHideTip] = useState(true)
   const canny = useRef(null);
   const [src] = useState(null);
   const [error, setError] = useState(null);
   const [captured, setCaptured] = useState(null);
 
   const sayStuff = (stream = globalStream, ini = initiated) => {
+    if (ini) {
+      let { width, height } = stream.getTracks()[0].getSettings();
+      navigator.mediaSession.setActionHandler("play", async function () {
+        capture(true, width, height);
+      });
 
-      if (ini) {
-        let { width, height } = stream.getTracks()[0].getSettings();
-        navigator.mediaSession.setActionHandler("play", async function () {
-          capture(true, width, height);
-        });
-
-        navigator.mediaSession.setActionHandler("pause", function () {
-          capture(true, width, height);
-        });
-      }
-    
+      navigator.mediaSession.setActionHandler("pause", function () {
+        capture(true, width, height);
+      });
+    }
   };
 
   useEffect(() => {
@@ -48,7 +46,7 @@ export default function Capture(props) {
             },
           ],
         });
-        sayStuff(null, false)
+        sayStuff(null, false);
       })
       .catch((error) => console.log(error.message));
   }, [videoBehind]);
@@ -72,7 +70,7 @@ export default function Capture(props) {
       navigator.mediaDevices
         .getUserMedia(constraintObj)
         .then((stream) => {
-          setInitiated(true)
+          setInitiated(true);
           let video = vidEle.current;
           setStream(stream);
           if ("srcObject" in video) {
@@ -91,7 +89,7 @@ export default function Capture(props) {
           };
           video.onloadedmetadata = (ev) => {
             video.play().then(() => {
-              setInitiated(true)
+              setInitiated(true);
               navigator.mediaSession.metadata = new window.MediaMetadata({
                 title: "Camera Capture",
                 artist: "Item Visualizer",
@@ -149,9 +147,8 @@ export default function Capture(props) {
         };
 
         video.onloadedmetadata = (ev) => {
-          
           video.play().then(() => {
-            setInitiated(true)
+            setInitiated(true);
 
             navigator.mediaSession.metadata = new window.MediaMetadata({
               title: "Screen Capture",
@@ -165,9 +162,7 @@ export default function Capture(props) {
               ],
             });
 
-              sayStuff(stream, true);
-
-            
+            sayStuff(stream, true);
           });
         };
       })
@@ -220,11 +215,10 @@ export default function Capture(props) {
     setWidth(vidEle.current.videoWidth);
   };
   const stop = (e) => {
-
     if (globalStream) {
-      vidEle.current.srcObject = null
+      vidEle.current.srcObject = null;
       globalStream.getTracks().forEach((track) => {
-        track.stop()
+        track.stop();
       });
     }
 
@@ -360,10 +354,7 @@ export default function Capture(props) {
         ref={videoBehind}
         style={{ visibility: "hidden", position: "fixed" }}
       />
-      <span className="tip">
-        While streaming, press your play/pause key on your keyboard to snap a
-        screenshot.
-      </span>
+
       <video
         ref={vidEle}
         className={src ? null : "inactive"}
@@ -376,6 +367,13 @@ export default function Capture(props) {
         muted
         controls
       />
+
+{hideTip &&  <p className="quick-alert" onClick={() => setHideTip(false)}>
+        While streaming, press your play/pause media key on your keyboard to 
+        snap a screenshot.
+      </p>}
+
+
       <div className="limit">
         {captured && (
           <Fragment>
@@ -393,7 +391,6 @@ export default function Capture(props) {
             </div>
           </Fragment>
         )}
-
         <canvas ref={canny} width={width} height={height} />
       </div>
     </div>

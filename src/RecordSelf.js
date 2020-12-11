@@ -1,9 +1,10 @@
-import React, { useState, useRef, Fragment } from "react";
+import React, { useState, useRef, Fragment, useEffect } from "react";
 import Summary from "./Summary";
 import "./styles/Video.css";
 let mediaRecorder;
 export default function RecordSelf(props) {
   const vidEle = useRef(null);
+  const videoBehind = useRef(null);
   const [src, setSRC] = useState(null);
   const [currentMock, setCurrentMock] = useState({});
   const [recording, setRecording] = useState(false);
@@ -25,6 +26,52 @@ export default function RecordSelf(props) {
     return check;
   });
   let chunks = [];
+
+  useEffect(() => {
+    videoBehind.current.src = require("./logofast.mp4");
+    videoBehind.current.volume = 1;
+    videoBehind.current
+      .play()
+      .then((_) => {
+        navigator.mediaSession.metadata = new window.MediaMetadata({
+          title: "Waiting for Stream",
+          artist: "Item Visualizer",
+          artwork: [
+            {
+              src: require("./icon/itemIcon.png"),
+              sizes: "96x96",
+              type: "image/png",
+            },
+          ],
+        });
+      })
+      .catch((error) => console.log(error.message));
+    sayStuff(videoBehind.current);
+  }, [videoBehind]);
+
+  const sayStuff = (video) => {
+    try {
+      navigator.mediaSession.setActionHandler("play", function () {
+        console.log("playing");
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+          mediaRecorder.stop();
+        }
+
+        navigator.mediaSession.playbackState = "playing";
+        video.play();
+      });
+      navigator.mediaSession.setActionHandler("pause", function () {
+        console.log("paused");
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+          mediaRecorder.stop();
+        }
+        navigator.mediaSession.playbackState = "paused";
+        video.pause();
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const mediaEverything = (stream) => {
     try {
@@ -49,9 +96,12 @@ export default function RecordSelf(props) {
         let blob = new Blob(chunks, { type: "video/mp4" });
         let kb = blob.size / 1024;
         kb = Number(kb.toFixed(2));
-        if (kb > 400000) {
+        if (kb > 20000) {
+          let size = blob.size;
           setError(
-            `Sorry, the video is ${kb} KB which exceeds the upload size. You can download or re-record your video.`
+            `Size Limit is 20MB. Your video is ${(
+              size / Math.pow(1024, 2)
+            ).toFixed(1)}MB. You can download your video, but cannot upload.`
           );
         }
 
@@ -64,15 +114,39 @@ export default function RecordSelf(props) {
         });
         setSRC(videoUrl);
         setVid(blob);
+
         let video = vidEle.current;
         if ("srcObject" in video) {
           video.srcObject = thestream;
         } else {
           video.src = videoUrl;
         }
+        video.volume = 1;
         video.controls = true;
         video.defaultMuted = false;
         video.muted = false;
+
+        video.play().then((res) => {
+          navigator.mediaSession.metadata = new window.MediaMetadata({
+            title: "Recorded Video",
+            artist: "Item Visualizer",
+            artwork: [
+              {
+                src: require("./icon/itemIcon.png"),
+                sizes: "96x96",
+                type: "image/png",
+              },
+            ],
+          });
+          navigator.mediaSession.setPositionState({
+            duration: 999999, //didn't allow infinite from stream
+            playbackRate: video.playbackRate,
+            position: video.currentTime,
+          });
+
+          sayStuff(video);
+        });
+
         setthestream(null);
       };
     } catch (err) {
@@ -109,6 +183,7 @@ export default function RecordSelf(props) {
           setthestream(newStream);
 
           let video = vidEle.current;
+
           if ("srcObject" in video) {
             video.srcObject = newStream;
           } else {
@@ -119,9 +194,8 @@ export default function RecordSelf(props) {
 
           video.defaultMuted = true;
           video.muted = true;
-          video.onloadeddata = (ev) => {
-            video.play();
-          };
+
+          video.play();
 
           mediaEverything(newStream);
         } catch (err) {
@@ -155,10 +229,24 @@ export default function RecordSelf(props) {
       name: "desktop-video",
       ext: ".mp4",
     };
+    let kb = vid.size / 1024;
+    kb = Number(kb.toFixed(2));
+    if (kb > 20000) {
+      let size = vid.size;
+      setError(
+        `Size Limit is 20MB. Your video is ${(size / Math.pow(1024, 2)).toFixed(
+          1
+        )}MB. You can download your video, but cannot upload.`
+      );
 
-    props.setFile(newFile);
-    setCurrentMock(iFrameData);
-    props.context.setSetup(true);
+      props.setFile(newFile);
+      setCurrentMock(iFrameData);
+      props.context.setSetup(true);
+    } else {
+      props.setFile(newFile);
+      setCurrentMock(iFrameData);
+      props.context.setSetup(true);
+    }
   };
 
   const stopRecord = (e) => {
@@ -203,9 +291,7 @@ export default function RecordSelf(props) {
         video.defaultMuted = true;
         video.muted = true;
 
-        video.onloadedmetadata = (ev) => {
-          video.play();
-        };
+        video.play();
 
         mediaEverything(stream);
       })
@@ -242,8 +328,7 @@ export default function RecordSelf(props) {
             <p className="error-message" onClick={() => setError(null)}>
               {error}
               <span className="go-here tooltip" onClick={() => goHere()}>
-                ?
-                <span className="tooltiptext">Troubleshoot</span>
+                ?<span className="tooltiptext">Troubleshoot</span>
               </span>
             </p>
           )}
@@ -255,6 +340,7 @@ export default function RecordSelf(props) {
               <span className="fontawesome-remove"></span>
               Stop Recording
             </button>
+            
           ) : (
             <div className="together-vid video-options">
               {isMobile ? (
@@ -293,6 +379,7 @@ export default function RecordSelf(props) {
                 </span>
               )}
 
+
               {src && !error && (
                 <button onClick={(e) => saveVideo()} className="button-blue">
                   <span className="fontawesome-ok"></span>
@@ -304,30 +391,46 @@ export default function RecordSelf(props) {
 
           <div className="mute-vid-dl">
             <video
+              loop
+              autoPlay
+              controls
+              ref={videoBehind}
+              style={{ visibility: "hidden", position: "fixed" }}
+            />
+            <video
               ref={vidEle}
               className={src ? null : "inactive"}
-              autoPlay
               src={src && src}
-              muted
             />
+            <p className="quick-alert">Video Size Limit: 20MB <br/>
+            While streaming, press your play/pause media key on your
+             keyboard to end your recording. </p>
+
+
             {thestream && (
-              <button className="button-round tooltip" onClick={() => mute ? muteMe(false) : muteMe(true)}>
+              <button
+                className="button-round tooltip"
+                onClick={() => (mute ? muteMe(false) : muteMe(true))}
+              >
                 {mute ? (
                   <Fragment>
-                  <img src={require("./icon/mic-slash.svg")} />
-                  <span className="tooltiptext">press to unmute</span>
+                    <img src={require("./icon/mic-slash.svg")} />
+                    <span className="tooltiptext">press to unmute</span>
                   </Fragment>
-
                 ) : (
                   <Fragment>
                     <img src={require("./icon/mic.svg")} />
                     <span className="tooltiptext">press to mute</span>
                   </Fragment>
-                  
                 )}
               </button>
             )}
-            {src && <a href={src} download><button className="button-blue">Download Video</button></a>}
+
+            {src && (
+              <a href={src} download>
+                <button className="button-blue">Download Video</button>
+              </a>
+            )}
           </div>
         </div>
       )}
