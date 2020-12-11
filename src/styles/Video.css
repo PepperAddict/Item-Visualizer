@@ -80,6 +80,8 @@
     box-sizing: border-box;
     position: absolute !important;
     right: 10px;
+    transform: translateY(-50%);
+    top: 50%;
 }
 
 .button-blue {

@@ -287,8 +287,8 @@ export default function Capture(props) {
       closeFullscreen();
     }
   };
-  const goHere = () => {
-    window.open("https://itemvisualizer.com/#/how#initialize", "_blank");
+  const goHere = (name) => {
+    window.open(`https://itemvisualizer.com/#/how#${name}`, "_blank");
   };
 
   return (
@@ -296,8 +296,8 @@ export default function Capture(props) {
       {error && (
         <p className="error-message" onClick={() => setError(null)}>
           {error}
-          <span className="go-here tooltip" onClick={() => goHere()}>
-            ?<span className="tooltiptext">Troubleshoot</span>
+          <span className="go-here tooltip" onClick={() => goHere('initialize')}>
+            ?<span className="tooltiptext">Troubleshoot Error</span>
           </span>
         </p>
       )}
@@ -381,6 +381,11 @@ export default function Capture(props) {
 {hideTip &&  <p className="quick-alert" onClick={() => setHideTip(false)}>
         While streaming, press your play/pause media key on your keyboard to 
         snap a screenshot.
+
+        <span className="go-here tooltip" onClick={() => goHere('media-keys')}>
+            ?<span className="tooltiptext">Learn more about Media Keys</span>
+          </span>
+
       </p>}
 
 

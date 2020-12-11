@@ -159,14 +159,15 @@ nav ul li:hover {
   padding: 5px;
   border-radius: 6px;
   font-size: .8rem;
-  position: absolute;
   z-index: 1;
-  top: 120%;
   left: 50%;
   margin-left: -75px;
   box-sizing: border-box;
   hyphens: none;
   word-break: keep-all;
+  transform: translateY(-50%);
+  position: absolute;
+  top: 230%;
 }
 .tooltip .tooltiptext:after {
   content: '';

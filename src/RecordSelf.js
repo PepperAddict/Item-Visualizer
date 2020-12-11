@@ -421,7 +421,8 @@ export default function RecordSelf(props) {
             />
             <p className="quick-alert">Video Size Limit: 20MB <br/>
             While streaming, press your play/pause media key on your
-             keyboard to end your recording. </p>
+             keyboard to end your recording. 
+          </p>
 
 
             {thestream && (
