@@ -82,7 +82,6 @@ export default function WorkspaceAndItem({ monday, file, context }) {
       if (typeof e.data === "string") {
         mWindow.close();
         setToken(e.data);
-        console.log(file);
         if (file) {
           setTheStatus({ code: "yellow", message: "Uploading File" });
           localStorage.setItem("forUpdate", e.data);
@@ -114,25 +113,20 @@ export default function WorkspaceAndItem({ monday, file, context }) {
         method: "POST",
         body: formData,
         headers: {
-          Authorization: "",
+          Authorization: alreadyKey,
         },
       })
         .then((res) => {
-          console.log(res);
-          return res.json();
-        })
-        .then((response) => {
-          console.log(response);
           setTheStatus({ code: "green", message: "File Attached" });
           context.setFile(null);
         })
         .catch((err) => {
           setTheStatus({ code: "red", message: "Something went wrong." });
-
+          console.log(err)
           //unfortunately using fetch this way won't tell you if there's an authentication error, but let's work with that
           //if there is a problem and overwrite with new key and see if that works:
           if (alreadyKey) {
-            setTheStatus({ code: "red", message: "Please Authenticate" });
+            setTheStatus({ code: "red", message: "Please Re-Authenticate" });
             mWindow = window.open(
               "https://talkingcloud.io/api/1/apiformun",
               "_blank",

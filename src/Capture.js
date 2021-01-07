@@ -4,7 +4,6 @@ import "./styles/Video.css";
 import { closeFullscreen, openFullscreen } from "./utils";
 import HiddenButtons from "./HiddenButtons";
 export default function Capture(props) {
-
   const vidEle = useRef(null);
   const videoBehind = useRef(null);
   const [height, setHeight] = useState(800);
@@ -12,45 +11,45 @@ export default function Capture(props) {
   const [initiated, setInitiated] = useState(false);
   const [globalStream, setStream] = useState(null);
   const [taken, setTaken] = useState(false);
-  const [hideTip, setHideTip] = useState(true)
+  const [hideTip, setHideTip] = useState(true);
   const canny = useRef(null);
   const [src] = useState(null);
   const [error, setError] = useState(null);
   const [captured, setCaptured] = useState(null);
 
   const sayStuff = (stream = globalStream, ini = initiated) => {
-    
-
     if (ini) {
       let { width, height } = stream.getTracks()[0].getSettings();
-      navigator.mediaSession.setActionHandler("play", async function () {
-        capture(true, width, height);
-      });
       navigator.mediaSession.setActionHandler("pause", function () {
+        navigator.mediaSession.playbackState = "paused";
         capture(true, width, height);
       });
     }
   };
 
   useEffect(() => {
-    document.dispatchEvent(new KeyboardEvent('keypress', {
-      key: 'Enter',
-    }, (e) => {
-      console.log(e)
-    })) ;
+    document.dispatchEvent(
+      new KeyboardEvent(
+        "keypress",
+        {
+          key: "Enter",
+        },
+        (e) => {
+          console.log(e);
+        }
+      )
+    );
   }, []);
-
 
   useEffect(() => {
     return () => {
-
       if (globalStream) {
         globalStream.getTracks().forEach((track) => {
           track.stop();
         });
       }
-    }
-  }, [globalStream])
+    };
+  }, [globalStream]);
 
   useEffect(() => {
     videoBehind.current.src = require("./logofast.mp4");
@@ -146,7 +145,6 @@ export default function Capture(props) {
     navigator.mediaDevices
       .getDisplayMedia(constraintObj)
       .then((stream) => {
-
         setStream(stream);
 
         let video = vidEle.current;
@@ -158,16 +156,18 @@ export default function Capture(props) {
           video.srcObject = stream;
           video.src = window.URL.createObjectURL(vid);
         }
-
+       
         stream.getVideoTracks()[0].onended = () => {
-          console.log(taken)
-          if (!taken) {
-            let {width, height} = stream.getTracks()[0].getSettings();
-            console.log("captured");
-            capture(false, width, height);
-          }
+
+
           setInitiated(false);
           stream.getTracks().forEach(function (track) {
+
+          if (taken === false && navigator.mediaSession.playbackState == "none") {
+
+            let { width, height } = stream.getTracks()[0].getSettings();
+            capture(false, width, height);
+          }
             track.stop();
           });
         };
@@ -201,6 +201,7 @@ export default function Capture(props) {
   const startRecord = (where = "camera") => {
     setInitiated(true);
     setTaken(false);
+    navigator.mediaSession.playbackState = 'none'
     let constraintObj;
     switch (where) {
       case "environment":
@@ -243,8 +244,7 @@ export default function Capture(props) {
     if (globalStream) {
       vidEle.current.srcObject = null;
       if (!taken) {
-        let {width, height} = globalStream.getTracks()[0].getSettings();
-        console.log("captured");
+        let { width, height } = globalStream.getTracks()[0].getSettings();
         capture(false, width, height);
       }
 
@@ -270,11 +270,12 @@ export default function Capture(props) {
     }
   };
   const capture = (e = false, w = null, h = null) => {
+
     if (e === true) {
-      setTaken(true)
+      setTaken(true);
+      navigator.mediaSession.playbackState = 'paused'
       captureReal(w, h);
-    }
-    if (taken === false) {
+    } else if (taken === false) {
       captureReal(w, h);
     }
   };
@@ -317,7 +318,10 @@ export default function Capture(props) {
       {error && (
         <p className="error-message" onClick={() => setError(null)}>
           {error}
-          <span className="go-here tooltip" onClick={() => goHere('initialize')}>
+          <span
+            className="go-here tooltip"
+            onClick={() => goHere("initialize")}
+          >
             ?<span className="tooltiptext">Troubleshoot Error</span>
           </span>
         </p>
@@ -399,16 +403,24 @@ export default function Capture(props) {
         controls
       />
 
-{hideTip &&  <p className="quick-alert" onClick={() => setHideTip(false)}>
-        While streaming, press your play/pause media key on your keyboard to 
-        snap a screenshot.
-
-        <span className="go-here tooltip" onClick={() => goHere('media-keys')}>
+      {hideTip && (
+        <p className="quick-alert" onClick={() => setHideTip(false)}>
+          There are 3 ways to snap a screenshot while streaming: <br />
+          <br />
+          1. Press the <strong>Capture </strong>button.
+          <br />
+          2. Press your media <strong>play/pause </strong>key on your keyboard. <br />
+          3. End your screen capture stream by pressing <strong>Stop Sharing</strong> if the
+          above were not used.
+          <br />
+          <span
+            className="go-here tooltip"
+            onClick={() => goHere("media-keys")}
+          >
             ?<span className="tooltiptext">Learn more about Media Keys</span>
           </span>
-
-      </p>}
-
+        </p>
+      )}
 
       <div className="limit">
         {captured && (

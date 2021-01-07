@@ -10,6 +10,7 @@ export default function RecordSelf(props) {
   const [recording, setRecording] = useState(false);
   const [thestream, setthestream] = useState(null);
   const [vid, setVid] = useState(null);
+  const [hideTip, setHideTip] = useState(true);
   const [error, setError] = useState(null);
   const [mute, setMute] = useState(false);
   const [isMobile] = useState(() => {
@@ -420,13 +421,18 @@ export default function RecordSelf(props) {
               className={src ? null : "inactive"}
               src={src && src}
             />
-            <p className="quick-alert">Video Size Limit: 20MB <br/>
-            While streaming, press your play/pause media key on your
-             keyboard to end your recording. 
+            {hideTip && (
+                          <p className="quick-alert" onClick={() => setHideTip(false)}>Video Size Limit: 20MB <br/> <br />
+
+            To end your recording, press the <strong>Stop</strong> button, <br />
+            or press your <strong>play/pause</strong> media key.
+              
              <span className="go-here tooltip" onClick={() => goHere('media-keys')}>
             ?<span className="tooltiptext">Learn more about Media Keys</span>
           </span>
           </p>
+            )}
+
 
 
             {thestream && (

@@ -6,7 +6,7 @@ export default function FileSent({ status, setStatus }) {
   useEffect(() => {
     setTimeout(function(){ 
       setStatus(null)
-     }, 10000);
+     }, 20000);
   }, [])
     
   return (
