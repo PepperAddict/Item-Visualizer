@@ -4,6 +4,7 @@ import "./styles/Video.css";
 import { closeFullscreen, openFullscreen } from "./utils";
 import HiddenButtons from "./HiddenButtons";
 export default function Capture(props) {
+
   const vidEle = useRef(null);
   const videoBehind = useRef(null);
   const [height, setHeight] = useState(800);
@@ -18,17 +19,28 @@ export default function Capture(props) {
   const [captured, setCaptured] = useState(null);
 
   const sayStuff = (stream = globalStream, ini = initiated) => {
+    
+
     if (ini) {
       let { width, height } = stream.getTracks()[0].getSettings();
       navigator.mediaSession.setActionHandler("play", async function () {
         capture(true, width, height);
       });
-
       navigator.mediaSession.setActionHandler("pause", function () {
         capture(true, width, height);
       });
     }
   };
+
+  useEffect(() => {
+    document.dispatchEvent(new KeyboardEvent('keypress', {
+      key: 'Enter',
+    }, (e) => {
+      console.log(e)
+    })) ;
+  }, []);
+
+
   useEffect(() => {
     return () => {
 
@@ -134,7 +146,9 @@ export default function Capture(props) {
     navigator.mediaDevices
       .getDisplayMedia(constraintObj)
       .then((stream) => {
+
         setStream(stream);
+
         let video = vidEle.current;
         if ("srcObject" in video) {
           video.srcObject = stream;
@@ -144,12 +158,14 @@ export default function Capture(props) {
           video.srcObject = stream;
           video.src = window.URL.createObjectURL(vid);
         }
+
         stream.getVideoTracks()[0].onended = () => {
-          // if (!taken) {
-          //removed feature for now as it automatically screenshots upon close
-          //   console.log("captured");
-          //   capture(false, width, height);
-          // }
+          console.log(taken)
+          if (!taken) {
+            let {width, height} = stream.getTracks()[0].getSettings();
+            console.log("captured");
+            capture(false, width, height);
+          }
           setInitiated(false);
           stream.getTracks().forEach(function (track) {
             track.stop();
@@ -171,7 +187,6 @@ export default function Capture(props) {
                 },
               ],
             });
-
             sayStuff(stream, true);
           });
         };
@@ -227,6 +242,12 @@ export default function Capture(props) {
   const stop = (e) => {
     if (globalStream) {
       vidEle.current.srcObject = null;
+      if (!taken) {
+        let {width, height} = globalStream.getTracks()[0].getSettings();
+        console.log("captured");
+        capture(false, width, height);
+      }
+
       globalStream.getTracks().forEach((track) => {
         track.stop();
       });
@@ -250,7 +271,7 @@ export default function Capture(props) {
   };
   const capture = (e = false, w = null, h = null) => {
     if (e === true) {
-      setTaken(true);
+      setTaken(true)
       captureReal(w, h);
     }
     if (taken === false) {

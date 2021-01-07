@@ -7,7 +7,7 @@ export default function FileSent({ status, setStatus }) {
     setTimeout(function(){ 
       setStatus(null)
      }, 10000);
-  })
+  }, [])
     
   return (
     <Fragment>
