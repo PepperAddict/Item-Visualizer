@@ -12,6 +12,7 @@ export default function WorkspaceAndItem({ monday, file, context }) {
   const [newItems, setNewItems] = useState(null);
   const [token, setToken] = useState(null);
   // const [percent, setUploadPercentage] = useState("0");
+  const [updateID, setUpdateID] = useState(null);
 
   const localstorage = (method, key, value = null) => {
     let name;
@@ -86,21 +87,21 @@ export default function WorkspaceAndItem({ monday, file, context }) {
           setTheStatus({ code: "yellow", message: "Uploading File" });
           localStorage.setItem("forUpdate", e.data);
           //now that we got the info, we can commence the upload
-          sendItInt(file);
+
+          sendItInt(file, updateID);
         }
       }
     });
-  }, [window, file]);
+  }, [window, file, updateID]);
 
-  const sendItInt = async (file, updateid) => {
-    let update = parseInt(updateid);
+  const sendItInt = async (file, updateid = updateID) => {
     const formData = new FormData();
-    const noVariableQuery = `mutation addFile($file: File!) {add_file_to_update (update_id: ${update}, file: $file) {id}}`;
+    const noVariableQuery = `mutation addFile($file: File!) {add_file_to_update (update_id: ${updateid}, file: $file) {id}}`;
     formData.append("query", noVariableQuery);
     formData.append("variables[file]", file.file, file.name + file.ext);
 
     let alreadyKey = localstorage("get", "forUpdate") || token;
-
+    setUpdateID(updateid);
     if (!alreadyKey) {
       setTheStatus({ code: "red", message: "Please Authenticate" });
       mWindow = window.open(
@@ -116,13 +117,16 @@ export default function WorkspaceAndItem({ monday, file, context }) {
           Authorization: alreadyKey,
         },
       })
+        .then((resp) => {
+          return resp.json();
+        })
         .then((res) => {
           setTheStatus({ code: "green", message: "File Attached" });
           context.setFile(null);
         })
         .catch((err) => {
           setTheStatus({ code: "red", message: "Something went wrong." });
-          console.log(err)
+          console.log(err);
           //unfortunately using fetch this way won't tell you if there's an authentication error, but let's work with that
           //if there is a problem and overwrite with new key and see if that works:
           if (alreadyKey) {
@@ -136,73 +140,6 @@ export default function WorkspaceAndItem({ monday, file, context }) {
         });
     }
   };
-
-  // This is no longer necessary, but I want to keep it around just in case for reference. I will remove when I 100%
-  // do not need it as I will send it in directly to monday not a middleware
-  // const sendItIn = (data) => {
-  //   return axios
-  //     .post("https://talkingcloud.io/api/1/mupload", data, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     })
-  //     .then((res) => {
-  //       if (res.data.errors) {
-  //         localstorage("remove", "forUpdate");
-
-  //         setTheStatus({ code: "red", message: "Please Authenticate" });
-  //         mWindow = window.open(
-  //           "https://talkingcloud.io/api/1/apiformun",
-  //           "_blank",
-  //           "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
-  //         );
-  //       } else {
-  //         setTheStatus({ code: "green", message: "File Attached" });
-  //         context.setFile(null);
-  //         context.setSetup(false);
-  //         context.setNav("welcome");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       localstorage("remove", "forUpdate");
-
-  //       setTheStatus({ code: "red", message: "Something went wrong" });
-  //     });
-  // };
-  // const sendFile = async (update_id) => {
-  //   const data = new FormData();
-  //   data.append("file", file.file, file.name + file.ext);
-  //   data.append("updateId", update_id);
-
-  //   let alreadyKey = localstorage("get", "forUpdate");
-
-  //   if (!alreadyKey) {
-  //     setTheStatus({ code: "red", message: "Please Authenticate" });
-  //     mWindow = window.open(
-  //       "https://talkingcloud.io/api/1/apiformun",
-  //       "_blank",
-  //       "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
-  //     );
-  //   } else {
-  //     data.append("apiKey", localstorage("get", "forUpdate"));
-  //     sendItIn(data);
-  //   }
-
-  //   window.addEventListener("message", (e) => {
-  //     if (typeof e.data === "string") {
-  //       mWindow.close();
-  //       data.append("apiKey", e.data);
-  //       setTheStatus({ code: "yellow", message: "Uploading File" });
-  //       try {
-  //         localStorage.setItem("forUpdate", e.data);
-  //       } catch (err) {
-  //         console.log(err);
-  //       }
-
-  //       sendItIn(data);
-  //     }
-  //   });
-  // };
 
   const sendUpdate = (e, element) => {
     const textarea = element.current.querySelectorAll("textarea");

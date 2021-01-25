@@ -404,7 +404,14 @@ export default function Capture(props) {
       />
 
       {hideTip && (
-        <p className="quick-alert" onClick={() => setHideTip(false)}>
+        <details className="quick-alert" >
+          <summary> Tips <span
+            className="go-here tooltip"
+            onClick={() => goHere("media-keys")}
+          >
+            ?<span className="tooltiptext">Learn more about Media Keys</span>
+          </span></summary>
+        <p>
           There are 3 ways to snap a screenshot while streaming: <br />
           <br />
           1. Press the <strong>Capture </strong>button.
@@ -413,13 +420,11 @@ export default function Capture(props) {
           3. End your screen capture stream by pressing <strong>Stop Sharing</strong> if the
           above were not used.
           <br />
-          <span
-            className="go-here tooltip"
-            onClick={() => goHere("media-keys")}
-          >
-            ?<span className="tooltiptext">Learn more about Media Keys</span>
-          </span>
+
         </p>
+        
+        </details>
+
       )}
 
       <div className="limit">
