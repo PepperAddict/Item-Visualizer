@@ -5,6 +5,7 @@ import { closeFullscreen, openFullscreen } from "./utils";
 import HiddenButtons from "./HiddenButtons";
 export default function Capture(props) {
   const vidEle = useRef(null);
+  const details = useRef(null);
   const videoBehind = useRef(null);
   const [height, setHeight] = useState(800);
   const [width, setWidth] = useState(800);
@@ -12,6 +13,7 @@ export default function Capture(props) {
   const [globalStream, setStream] = useState(null);
   const [taken, setTaken] = useState(false);
   const [hideTip, setHideTip] = useState(true);
+
   const canny = useRef(null);
   const [src] = useState(null);
   const [error, setError] = useState(null);
@@ -329,7 +331,7 @@ export default function Capture(props) {
       <h3>Capture a screenshot from your camera or screen.</h3>
       <div className="video-options">
         {initiated ? (
-          <div className="initiate">
+          <div>
             <span className="split">
               <button className="button-red" onClick={() => stop()}>
                 <span className="fontawesome-remove"></span>
@@ -342,8 +344,8 @@ export default function Capture(props) {
             </span>
           </div>
         ) : isMobile ? (
-          <div className="initiate">
-            <span className="split">
+          <div>
+            <span>
               <button
                 className={captured ? "button-gray" : "button-blue"}
                 onClick={() => startRecord("front")}
@@ -361,7 +363,7 @@ export default function Capture(props) {
             </span>
           </div>
         ) : (
-          <div className="initiate">
+          <div>
             <span className="split">
               <button
                 className={captured ? "button-gray" : "button-blue"}
@@ -403,29 +405,25 @@ export default function Capture(props) {
         controls
       />
 
-      {hideTip && (
-        <details className="quick-alert" >
-          <summary> Tips <span
+
+        <details className={(captured) ? "position-last quick-alert" : "quick-alert"} ref={details} >
+          <summary> There are 3 ways to snap a screenshot while streaming: </summary>
+        <p onClick={() => (details.current.open) ? details.current.open = false : details.current.open = true}>
+        <span
             className="go-here tooltip"
             onClick={() => goHere("media-keys")}
           >
             ?<span className="tooltiptext">Learn more about Media Keys</span>
-          </span></summary>
-        <p>
-          There are 3 ways to snap a screenshot while streaming: <br />
-          <br />
+          </span>
           1. Press the <strong>Capture </strong>button.
           <br />
           2. Press your media <strong>play/pause </strong>key on your keyboard. <br />
-          3. End your screen capture stream by pressing <strong>Stop Sharing</strong> if the
+          3. End your <i>screen capture stream</i> by pressing <strong>Stop Sharing</strong> if the
           above were not used.
           <br />
 
         </p>
-        
         </details>
-
-      )}
 
       <div className="limit">
         {captured && (

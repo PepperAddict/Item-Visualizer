@@ -35,6 +35,8 @@
 }
 .mute-vid-dl {
     position: relative;
+    display: grid;
+    grid-gap: 10px;
 }
 .button-round img {
     height: 100%;
@@ -129,7 +131,10 @@ video {
     overflow: hidden;
     position: relative;
 }
-
+.video-capture-container {
+    display: grid;
+    grid-gap: 10px;
+}
 .video-capture-container canvas {
     object-fit: contain;
     width: 100%;
@@ -149,9 +154,6 @@ video {
     place-items: end;
     width: 100%;
     right: 10px;
-}
-.initiate {
-    margin: 10px 0 20px;
 }
 
 .video-options .split {

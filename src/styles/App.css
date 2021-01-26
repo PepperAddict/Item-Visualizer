@@ -150,6 +150,9 @@ nav ul li:hover {
   position: relative;
   cursor: help;
 }
+.show-right {
+  float: right;
+}
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 150px;

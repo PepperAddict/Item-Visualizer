@@ -13,6 +13,7 @@ export default function RecordSelf(props) {
   const [hideTip, setHideTip] = useState(true);
   const [error, setError] = useState(null);
   const [mute, setMute] = useState(false);
+  const details = useRef(null)
   const [isMobile] = useState(() => {
     let check = false;
     (() => {
@@ -421,17 +422,23 @@ export default function RecordSelf(props) {
               className={src ? null : "inactive"}
               src={src && src}
             />
-            {hideTip && (
-                          <p className="quick-alert" onClick={() => setHideTip(false)}>Video Size Limit: 20MB <br/> <br />
 
-            To end your recording, press the <strong>Stop</strong> button, <br />
-            or press your <strong>play/pause</strong> media key.
-              
-             <span className="go-here tooltip" onClick={() => goHere('media-keys')}>
+
+<details className="quick-alert" ref={details} >
+          <summary><span className="show-right">Video Size Limit: 20 MB</span> <span>Three ways to end your recording:</span>  </summary>
+        <p onClick={() => (details.current.open) ? details.current.open = false : details.current.open = true}>
+        <span
+            className="go-here tooltip"
+            onClick={() => goHere("media-keys")}
+          >
             ?<span className="tooltiptext">Learn more about Media Keys</span>
           </span>
-          </p>
-            )}
+          1. Press the <strong>Stop</strong> button <br />
+          2. Press your <strong>play/pause</strong> media key. <br />
+          3. If recording screen, click on <strong>Stop Sharing</strong>.
+
+        </p>
+        </details>
 
 
 
