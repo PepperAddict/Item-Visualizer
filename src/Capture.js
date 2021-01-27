@@ -16,7 +16,10 @@ export default function Capture(props) {
 
   const canny = useRef(null);
   const [src] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState({
+    message: null, 
+    type: null
+  });
   const [captured, setCaptured] = useState(null);
 
   const sayStuff = (stream = globalStream, ini = initiated) => {
@@ -130,14 +133,17 @@ export default function Capture(props) {
         })
         .catch((err) => {
           if (err.name === "NotAllowedError") {
-            setError("Please Grant Permission to Use Microphone and Camera");
+            setError({message: "Please Grant Permission to Use Microphone and Camera", type: 1});
+          } else if (err.name === "NotFoundError") {
+            setError({message: "Camera Not Detected", type: 2})
           } else {
-            setError("Something went wrong");
+            console.log(err.name)
+            setError({message: "Something went wrong", type: 3});
           }
           setInitiated(false);
         });
     } catch (err) {
-      setError("Something went wrong");
+      setError({message: "Something went wrong", type: 3});
       setInitiated(false);
       console.log(err);
     }
@@ -164,12 +170,11 @@ export default function Capture(props) {
 
           setInitiated(false);
           stream.getTracks().forEach(function (track) {
+            if (taken === false && navigator.mediaSession.playbackState == "none") {
 
-          if (taken === false && navigator.mediaSession.playbackState == "none") {
-
-            let { width, height } = stream.getTracks()[0].getSettings();
-            capture(false, width, height);
-          }
+              let { width, height } = globalStream.getTracks()[0].getSettings();
+              capture(false, width, height);
+            }
             track.stop();
           });
         };
@@ -195,8 +200,7 @@ export default function Capture(props) {
       })
       .catch((err) => {
         setInitiated(false);
-        setError("Something went wrong");
-        console.log(err);
+        setError({message: "Something went wrong", type: 3});
       });
   };
 
@@ -243,6 +247,12 @@ export default function Capture(props) {
     setWidth(vidEle.current.videoWidth);
   };
   const stop = (e) => {
+    if (taken === false && navigator.mediaSession.playbackState == "none") {
+
+      let { width, height } = globalStream.getTracks()[0].getSettings();
+      capture(false, width, height);
+    }
+
     if (globalStream) {
       vidEle.current.srcObject = null;
       if (!taken) {
@@ -317,15 +327,18 @@ export default function Capture(props) {
 
   return (
     <div className="video-capture-container">
-      {error && (
-        <p className="error-message" onClick={() => setError(null)}>
-          {error}
-          <span
+      {error.message && (
+        <p className="error-message" onClick={() => setError({message: null, type: null})}>
+          {error.message}
+          {error.type == 1 && (
+                      <span
             className="go-here tooltip"
             onClick={() => goHere("initialize")}
           >
             ?<span className="tooltiptext">Troubleshoot Error</span>
           </span>
+          )}
+
         </p>
       )}
       <h3>Capture a screenshot from your camera or screen.</h3>

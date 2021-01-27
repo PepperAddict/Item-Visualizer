@@ -11,9 +11,12 @@ export default function RecordSelf(props) {
   const [thestream, setthestream] = useState(null);
   const [vid, setVid] = useState(null);
   const [hideTip, setHideTip] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState({
+    type: null, 
+    message: null
+  });
   const [mute, setMute] = useState(false);
-  const details = useRef(null)
+  const details = useRef(null);
   const [isMobile] = useState(() => {
     let check = false;
     (() => {
@@ -34,8 +37,8 @@ export default function RecordSelf(props) {
       if (mediaRecorder && mediaRecorder.state === "recording") {
         mediaRecorder.stop();
       }
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     videoBehind.current.src = require("./logofast.mp4");
@@ -109,69 +112,67 @@ export default function RecordSelf(props) {
         kb = Number(kb.toFixed(2));
 
         try {
-        if (kb > 20000) {
-          let size = blob.size;
-          setError(
-            `Size Limit is 20MB. Your video is ${(
-              size / Math.pow(1024, 2)
-            ).toFixed(1)}MB. You can download your video, but cannot upload.`
-          );
-        }
+          if (kb > 20000) {
+            let size = blob.size;
+            setError( {message:  `Size Limit is 20MB. Your video is ${(
+                size / Math.pow(1024, 2)
+              ).toFixed(1)}MB. You can download your video, but cannot upload.`, type: 2}
 
-        let videoUrl = window.URL.createObjectURL(blob);
-        setRecording(false);
-        //clear the chunk and stop the tracks so it stops recording when it stops
-        chunks = [];
-        stream.getTracks().forEach(function (track) {
-          track.stop();
-        });
-        setSRC(videoUrl);
-        setVid(blob);
+            );
+          }
 
-        let video = vidEle.current;
-
-        if ("srcObject" in video) {
-          video.srcObject = thestream;
-        } else {
-          video.src = videoUrl;
-        }
-        video.volume = 1;
-        video.controls = true;
-        video.defaultMuted = false;
-        video.muted = false;
-
-        video.play().then((res) => {
-          navigator.mediaSession.metadata = new window.MediaMetadata({
-            title: "Recorded Video",
-            artist: "Item Visualizer",
-            artwork: [
-              {
-                src: require("./icon/itemIcon.png"),
-                sizes: "96x96",
-                type: "image/png",
-              },
-            ],
+          let videoUrl = window.URL.createObjectURL(blob);
+          setRecording(false);
+          //clear the chunk and stop the tracks so it stops recording when it stops
+          chunks = [];
+          stream.getTracks().forEach(function (track) {
+            track.stop();
           });
-          navigator.mediaSession.setPositionState({
-            duration: 999999, //didn't allow infinite from stream
-            playbackRate: video.playbackRate,
-            position: video.currentTime,
+          setSRC(videoUrl);
+          setVid(blob);
+
+          let video = vidEle.current;
+
+          if ("srcObject" in video) {
+            video.srcObject = thestream;
+          } else {
+            video.src = videoUrl;
+          }
+          video.volume = 1;
+          video.controls = true;
+          video.defaultMuted = false;
+          video.muted = false;
+
+          video.play().then((res) => {
+            navigator.mediaSession.metadata = new window.MediaMetadata({
+              title: "Recorded Video",
+              artist: "Item Visualizer",
+              artwork: [
+                {
+                  src: require("./icon/itemIcon.png"),
+                  sizes: "96x96",
+                  type: "image/png",
+                },
+              ],
+            });
+            navigator.mediaSession.setPositionState({
+              duration: 999999, //didn't allow infinite from stream
+              playbackRate: video.playbackRate,
+              position: video.currentTime,
+            });
+
+            sayStuff(video);
           });
 
-          sayStuff(video);
-        });
-
-        setthestream(null);
-        } catch(err) {
-          console.log(err)
+          setthestream(null);
+        } catch (err) {
+          console.log(err);
         }
-
-
       };
     } catch (err) {
       console.log(err);
       setRecording(false);
-      setError("Something went wrong");
+      setError({message: "Something went wrong", type: 2});
     }
   };
 
@@ -187,7 +188,7 @@ export default function RecordSelf(props) {
     navigator.mediaDevices
       .getDisplayMedia(constraintObj)
       .then(async (stream) => {
-        setError(false);
+        setError({message: null, type: null});
         try {
           const videoStream = stream.getVideoTracks()[0];
           const justAudio = await navigator.mediaDevices.getUserMedia({
@@ -221,15 +222,15 @@ export default function RecordSelf(props) {
           stream.getTracks().forEach((track) => track.stop());
           setRecording(false);
           if (err.name === "NotAllowedError") {
-            setError("Please Grant Permission to Use Microphone and Camera");
+            setError({message: "Please Grant Permission to Use Microphone and Camera", type: 1});
           } else {
-            setError("Something went wrong");
+            setError({message: "Something went wrong", type: 2});
           }
         }
       })
       .catch((err) => {
         setRecording(false);
-        setError("Something went wrong");
+        setError({message: "Something went wrong", type: 2});
       });
   };
 
@@ -252,10 +253,10 @@ export default function RecordSelf(props) {
     kb = Number(kb.toFixed(2));
     if (kb > 20000) {
       let size = vid.size;
-      setError(
+      setError({message: 
         `Size Limit is 20MB. Your video is ${(size / Math.pow(1024, 2)).toFixed(
           1
-        )}MB. You can download your video, but cannot upload.`
+        )}MB. You can download your video, but cannot upload.`, type: 2}
       );
 
       props.setFile(newFile);
@@ -273,7 +274,7 @@ export default function RecordSelf(props) {
   };
 
   const startRecord = (where = null) => {
-    setError(false);
+    setError({message: null, type: null});
     setRecording(true);
 
     let constraintObj;
@@ -316,9 +317,11 @@ export default function RecordSelf(props) {
       })
       .catch((err) => {
         if (err.name === "NotAllowedError") {
-          setError("Please Grant Permission to Use Microphone and Camera");
+          setError({message: "Please Grant Permission to Use Microphone and Camera", type: 1});
+        } else if (err.name === "NotFoundError") {
+          setError({message: "Your Camera was not detected", type: 2});
         } else {
-          setError("Something went wrong");
+          setError({message: "Something went wrong.", type: 2});
         }
         setRecording(false);
       });
@@ -344,12 +347,15 @@ export default function RecordSelf(props) {
         <Summary currentMock={currentMock} />
       ) : (
         <div className="video-container">
-          {error && (
-            <p className="error-message" onClick={() => setError(null)}>
-              {error}
-              <span className="go-here tooltip" onClick={() => goHere()}>
-                ?<span className="tooltiptext">Troubleshoot</span>
-              </span>
+          {error.message && (
+            <p className="error-message" onClick={() => setError({message: null, type: null})}>
+              {error.message}
+              {error.type ==
+                1 && (
+                  <span className="go-here tooltip" onClick={() => goHere()}>
+                    ?<span className="tooltiptext">Troubleshoot</span>
+                  </span>
+                )}
             </p>
           )}
 
@@ -360,7 +366,6 @@ export default function RecordSelf(props) {
               <span className="fontawesome-remove"></span>
               Stop Recording
             </button>
-            
           ) : (
             <div className="together-vid video-options">
               {isMobile ? (
@@ -399,8 +404,7 @@ export default function RecordSelf(props) {
                 </span>
               )}
 
-
-              {src && !error && (
+              {src && !error.message && (
                 <button onClick={(e) => saveVideo()} className="button-blue">
                   <span className="fontawesome-ok"></span>
                   Save and Continue
@@ -423,24 +427,32 @@ export default function RecordSelf(props) {
               src={src && src}
             />
 
-
-<details className="quick-alert" ref={details} >
-          <summary><span className="show-right">Video Size Limit: 20 MB</span> <span>Three ways to end your recording:</span>  </summary>
-        <p onClick={() => (details.current.open) ? details.current.open = false : details.current.open = true}>
-        <span
-            className="go-here tooltip"
-            onClick={() => goHere("media-keys")}
-          >
-            ?<span className="tooltiptext">Learn more about Media Keys</span>
-          </span>
-          1. Press the <strong>Stop</strong> button <br />
-          2. Press your <strong>play/pause</strong> media key. <br />
-          3. If recording screen, click on <strong>Stop Sharing</strong>.
-
-        </p>
-        </details>
-
-
+            <details className="quick-alert" ref={details}>
+              <summary>
+                <span className="show-right">Video Size Limit: 20 MB</span>{" "}
+                <span>Three ways to end your recording:</span>{" "}
+              </summary>
+              <p
+                onClick={() =>
+                  details.current.open
+                    ? (details.current.open = false)
+                    : (details.current.open = true)
+                }
+              >
+                <span
+                  className="go-here tooltip"
+                  onClick={() => goHere("media-keys")}
+                >
+                  ?
+                  <span className="tooltiptext">
+                    Learn more about Media Keys
+                  </span>
+                </span>
+                1. Press the <strong>Stop</strong> button <br />
+                2. Press your <strong>play/pause</strong> media key. <br />
+                3. If recording screen, click on <strong>Stop Sharing</strong>.
+              </p>
+            </details>
 
             {thestream && (
               <button
