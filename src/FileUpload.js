@@ -205,7 +205,7 @@ export default function FileUpload({
         </label>
         a file to upload
       </div>
-      <p className="quick-alert">Size limit: 20 MB</p>
+      <p className="small-alert">Size limit: 20 MB</p>
     </form>
   );
 }

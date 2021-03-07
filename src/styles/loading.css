@@ -14,11 +14,24 @@
   outline: 0px;
   padding: 15px 0;
 }
+.small-alert {
+  background: #DFF0FF;
+  border-radius: 15px;
+  padding: 0 10px;
+  grid-column: 1 / -1;
+  box-sizing: border-box;
+  position: relative;
+  color: #323338;
+  padding-left: 60px;
+  font-size: 1rem;
+  height: 40px;
+  line-height: 40px;
+}
 .position-last {
   grid-row: 6
 }
 
-.quick-alert::before {
+.small-alert::before, .quick-alert::before {
   content: 'i';
   background: #0085FF;
   padding: 15px;
