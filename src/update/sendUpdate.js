@@ -57,7 +57,6 @@ export default function WorkspaceAndItem({ monday, file, context }) {
   };
 
   const sendFile = (file, updateID) => {
-    console.log(file)
     updateID = parseInt(updateID);
 
     setTheStatus({ code: "yellow", message: "Uploading File" });
@@ -75,7 +74,6 @@ export default function WorkspaceAndItem({ monday, file, context }) {
       monday.api(fileMutation, { variables })
         .then((res) => {
           if (res) {
-            console.log(res);
             setTheStatus({ code: "green", message: "File Attached" });
           }
         }).catch((err) => console.log(err));
