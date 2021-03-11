@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import Summary from "./Summary";
-import "./styles/Video.css";
+import Summary from "../update/Summary";
+import "../styles/Video.css";
 let mediaRecorder;
 
 export default function RecordDesktop(props) {

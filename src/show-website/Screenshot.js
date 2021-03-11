@@ -1,7 +1,7 @@
 import React, { useState} from "react";
-import Summary from "./Summary";
-import "./styles/Summary.css";
-import Loading from './Loading'
+import Summary from "../update/Summary";
+import "../styles/Summary.css";
+import Loading from '../utils/Loading'
 let controller
 export default function ApiCall(props) {
   const [error, setError] = useState(false);

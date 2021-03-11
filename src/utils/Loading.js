@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import "./styles/loading.css";
+import "../styles/loading.css";
 
 export default function Loading(props) {
   return (
@@ -10,7 +10,7 @@ export default function Loading(props) {
         <div></div>
         <div></div>
       </div>
-      <div className="quick-alert">
+      <div className="quick-alert small-alert">
         This may take up to 30 seconds
         <button onClick={() => props.controller.abort()}>cancel</button>
       </div>

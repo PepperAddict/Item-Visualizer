@@ -13,13 +13,7 @@ export default function FileUpload({
 
   const setLink = (e, nosupport = false, image = null) => {
     let data;
-    const getExt = e.name.split(".").pop();
-    const theFile = {
-      file: e,
-      name: "uploaded-file",
-      ext: "." + getExt,
-    };
-    setFile(theFile);
+
 
     if (!nosupport) {
       if (image) {
@@ -53,6 +47,7 @@ export default function FileUpload({
         generatedImage: null,
       };
     }
+    setFile(e)
 
     setCurrentMock(data);
     setSetup(true);
@@ -90,50 +85,7 @@ export default function FileUpload({
       }
     }
   };
-  //get back to here when i figure out monday upload situation
-  // const onChange = async ({
-  //   target: {
-  //     validity,
-  //     files: [file],
-  //   },
-  // }) => {
-  //   if (validity.valid) {
-  //     var filename = file.name;
 
-  //     // var blobit = new Blob([reader.result], {type: file.type})
-  //     var formData = new FormData();
-
-  //     formData.append("variables[file]", file, filename);
-
-  //     const noVariableQuery = `mutation addFile($file: File!) {add_file_to_update (update_id: 766227121, file: $file) {id}}`;
-
-  //     formData.append("query", noVariableQuery);
-  //         monday
-  //         .api(noVariableQuery)
-  //         .then((res) => console.log(res))
-  //         .catch((err) => console.log("nowork"));
-
-  //     const proxyurl = "https://cors-anywhere.herokuapp.com/";
-  //     await fetch('https://api.monday.com/v2/file', {
-  //       method: "POST",
-  //       body: formData,
-  //       headers: {
-  //         "Authorization": apikey
-  //       }
-  //     }).then((res) => res.json()).then((response) => console.log(response)).catch((err) => console.log(err))
-
-  //     await fetch("https://api.monday.com/v2/", {
-  //       method: "POST",
-  //       body: formData,
-  //       headers: {
-  //         Authorization: apiKey
-  //       },
-  //     })
-  //       .then((res) => res.json())
-  //       .then((response) => console.log(response))
-  //       .catch((err) => console.log(err));
-  //   }
-  // };
 
   const handleDragEnter = (e) => {
     e.preventDefault();

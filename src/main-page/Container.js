@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import RecordDesktop from "./RecordDesktop";
-import Prototype from "./Prototype";
+import RecordDesktop from "../show-video/RecordDesktop";
+import Prototype from "../show-idea/Prototype";
 import Sidebar from "./Sidebar";
 import Welcome from "./Welcome";
-import Screenshot from "./Screenshot";
-import Self from "./RecordSelf";
-import "./styles/App.css";
+import Screenshot from "../show-website/Screenshot";
+import Self from "../show-video/RecordSelf";
+import "../styles/App.css";
 
-import { BoardContext } from "./Context";
+import { BoardContext } from "../utils/Context";
 import mondaySDK from "monday-sdk-js";
 const monday = mondaySDK();
 

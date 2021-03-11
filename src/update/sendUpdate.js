@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 
-import { BoardContext } from "./Context";
+import { BoardContext } from "../utils/Context";
 
-import searchIcon from "./icon/search.svg";
-import FileSent from "./FileSent";
-let mWindow;
+import searchIcon from "../icon/search.svg";
+import FileSent from "../utils/FileSent";
+
 
 export default function WorkspaceAndItem({ monday, file, context }) {
   const [items, setItems] = useState(null);
@@ -57,9 +57,8 @@ export default function WorkspaceAndItem({ monday, file, context }) {
   };
 
   const sendFile = (file, updateID) => {
+    console.log(file)
     updateID = parseInt(updateID);
-    const formData = new FormData();
-    formData.append("variables[file]", file.file, file.name + file.ext);
 
     setTheStatus({ code: "yellow", message: "Uploading File" });
 
@@ -70,18 +69,16 @@ export default function WorkspaceAndItem({ monday, file, context }) {
             }
         `;
 
-    const variables = { file: formData, update_id: parseInt(updateID) };
+    const variables = { file, update_id: parseInt(updateID) };
 
     try {
-      monday
-        .api(fileMutation, { variables })
+      monday.api(fileMutation, { variables })
         .then((res) => {
           if (res) {
             console.log(res);
             setTheStatus({ code: "green", message: "File Attached" });
           }
-        })
-        .catch((err) => console.log(err));
+        }).catch((err) => console.log(err));
     } catch (err) {
       console.log(err);
     }

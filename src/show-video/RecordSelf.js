@@ -1,7 +1,8 @@
 import React, { useState, useRef, Fragment, useEffect } from "react";
-import Summary from "./Summary";
-import "./styles/Video.css";
+import Summary from "../update/Summary";
+import "../styles/Video.css";
 let mediaRecorder;
+const itemIcon = require('../icon/itemIcon.png')
 export default function RecordSelf(props) {
   const vidEle = useRef(null);
   const videoBehind = useRef(null);
@@ -41,7 +42,7 @@ export default function RecordSelf(props) {
   }, []);
 
   useEffect(() => {
-    videoBehind.current.src = require("./logofast.mp4");
+    videoBehind.current.src = require("../logofast.mp4");
     videoBehind.current.volume = 1;
     videoBehind.current
       .play()
@@ -50,8 +51,8 @@ export default function RecordSelf(props) {
           title: "Waiting for Stream",
           artist: "Item Visualizer",
           artwork: [
-            {
-              src: require("./icon/itemIcon.png"),
+            { 
+              src: itemIcon,
               sizes: "96x96",
               type: "image/png",
             },
@@ -129,7 +130,10 @@ export default function RecordSelf(props) {
             track.stop();
           });
           setSRC(videoUrl);
-          setVid(blob);
+
+          const newfile = new File([blob], "recorded-video.mp4" , {lastModified: Date.now(),  type: blob.type });
+
+          setVid(newfile);
 
           let video = vidEle.current;
 
@@ -149,7 +153,7 @@ export default function RecordSelf(props) {
               artist: "Item Visualizer",
               artwork: [
                 {
-                  src: require("./icon/itemIcon.png"),
+                  src: itemIcon,
                   sizes: "96x96",
                   type: "image/png",
                 },
@@ -259,11 +263,11 @@ export default function RecordSelf(props) {
         )}MB. You can download your video, but cannot upload.`, type: 2}
       );
 
-      props.setFile(newFile);
+      props.setFile(vid);
       setCurrentMock(iFrameData);
       props.context.setSetup(true);
     } else {
-      props.setFile(newFile);
+      props.setFile(vid);
       setCurrentMock(iFrameData);
       props.context.setSetup(true);
     }
@@ -461,12 +465,12 @@ export default function RecordSelf(props) {
               >
                 {mute ? (
                   <Fragment>
-                    <img src={require("./icon/mic-slash.svg")} />
+                    <img src={require("../icon/mic-slash.svg")} />
                     <span className="tooltiptext">press to unmute</span>
                   </Fragment>
                 ) : (
                   <Fragment>
-                    <img src={require("./icon/mic.svg")} />
+                    <img src={require("../icon/mic.svg")} />
                     <span className="tooltiptext">press to mute</span>
                   </Fragment>
                 )}

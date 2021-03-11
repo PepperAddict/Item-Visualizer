@@ -1,8 +1,8 @@
 import React, { useRef, useState, Fragment, useEffect } from "react";
 
-import "./styles/Video.css";
-import { closeFullscreen, openFullscreen } from "./utils";
-import HiddenButtons from "./HiddenButtons";
+import "../styles/Video.css";
+import { closeFullscreen, openFullscreen } from "../utils";
+import HiddenButtons from "../utils/HiddenButtons";
 export default function Capture(props) {
   const vidEle = useRef(null);
   const details = useRef(null);
@@ -57,7 +57,7 @@ export default function Capture(props) {
   }, [globalStream]);
 
   useEffect(() => {
-    videoBehind.current.src = require("./logofast.mp4");
+    videoBehind.current.src = require("../logofast.mp4");
     videoBehind.current
       .play()
       .then((_) => {
@@ -66,7 +66,7 @@ export default function Capture(props) {
           artist: "Item Visualizer",
           artwork: [
             {
-              src: require("./icon/itemIcon.png"),
+              src: require("../icon/itemIcon.png"),
               sizes: "96x96",
               type: "image/png",
             },
@@ -121,7 +121,7 @@ export default function Capture(props) {
                 artist: "Item Visualizer",
                 artwork: [
                   {
-                    src: require("./icon/itemIcon.png"),
+                    src: require("../icon/itemIcon.png"),
                     sizes: "96x96",
                     type: "image/png",
                   },
@@ -188,7 +188,7 @@ export default function Capture(props) {
               artist: "Item Visualizer",
               artwork: [
                 {
-                  src: require("./icon/itemIcon.png"),
+                  src: require("../icon/itemIcon.png"),
                   sizes: "96x96",
                   type: "image/png",
                 },
@@ -302,13 +302,9 @@ export default function Capture(props) {
       thumbnail: null,
       realTitle: "Screen Capture",
     };
-    const newfile = new File([captured], "screenshot", { type: captured.type });
-    const thefile = {
-      file: newfile,
-      name: "screenshot",
-      ext: ".png",
-    };
-    props.setFile(thefile);
+    const newfile = new File([captured], "screenshot.png" , {lastModified: Date.now(),  type: captured.type });
+
+    props.setFile(newfile);
     props.setCurrentMock(iFrameData);
     props.setSetup(true);
     props.context.setReady(true);
@@ -399,7 +395,7 @@ export default function Capture(props) {
       <video
         loop
         autoPlay
-        src={require("./logofast.mp4")}
+        src={require("../logofast.mp4")}
         controls
         ref={videoBehind}
         style={{ visibility: "hidden", position: "fixed" }}

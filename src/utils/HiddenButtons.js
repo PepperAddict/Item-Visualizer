@@ -1,5 +1,5 @@
 import React from "react";
-import fullIcon from "./icon/full.svg";
+import fullIcon from "../icon/full.svg";
 
 export default function HiddenButtons(props) {
 

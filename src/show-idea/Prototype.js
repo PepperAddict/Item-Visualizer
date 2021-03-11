@@ -1,10 +1,10 @@
 import React, { useState, Fragment } from "react";
-import Summary from "./Summary";
-import Upload from "./FileUpload";
-import support from "./icon/supports.png";
+import Summary from "../update/Summary";
+import Upload from "../update/FileUpload";
+import support from "../icon/supports.png";
 import Capture from "./Capture";
-import Loading from "./Loading";
-import "./styles/Prototype.css";
+import Loading from "../utils/Loading";
+import "../styles/Prototype.css";
 let controller;
 
 export default function Prototype(props) {
@@ -111,15 +111,9 @@ export default function Prototype(props) {
             iframe: null,
           };
 
-          const myFile = new File([image], "thumbnail", { type: image.type });
+          const myFile = new File([image], "thumbnail.jpg", { type: image.type });
 
-          const theFile = {
-            file: myFile,
-            name: "thumbnail",
-            ext: ".jpg",
-          };
-
-          props.setFile(theFile);
+          props.setFile(myFile);
           await setCurrentMock(iFrameData);
           props.context.setSetup(true);
           setLoading(false);
@@ -300,42 +294,42 @@ export default function Prototype(props) {
                 <div className="item-support">
                   <span className="tooltip">
                     <img
-                      src={require("./icon/supports1.png")}
+                      src={require("../icon/supports1.png")}
                       alt="supports XD"
                     />
                     <span className="tooltiptext">Adobe XD</span>
                   </span>
                   <span className="tooltip">
                     <img
-                      src={require("./icon/supports2.png")}
+                      src={require("../icon/supports2.png")}
                       alt="supports Anima"
                     />
                     <span className="tooltiptext">Anima</span>
                   </span>
                   <span className="tooltip">
                     <img
-                      src={require("./icon/supports3.png")}
+                      src={require("../icon/supports3.png")}
                       alt="supports Figma"
                     />
                     <span className="tooltiptext">Figma</span>
                   </span>
                   <span className="tooltip">
                     <img
-                      src={require("./icon/supports4.png")}
+                      src={require("../icon/supports4.png")}
                       alt="supports Invision"
                     />
                     <span className="tooltiptext">Invision</span>
                   </span>
                   <span className="tooltip">
                     <img
-                      src={require("./icon/supports5.png")}
+                      src={require("../icon/supports5.png")}
                       alt="supports Google Drive"
                     />
                     <span className="tooltiptext">Google Drive</span>
                   </span>
                   <span className="tooltip">
                     <img
-                      src={require("./icon/supports6.png")}
+                      src={require("../icon/supports6.png")}
                       alt="supports Image Links"
                     />
                     <span className="tooltiptext">Image Links</span>

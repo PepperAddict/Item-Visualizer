@@ -1,11 +1,11 @@
 import React, { useState, Fragment } from "react";
 import moment from "moment";
-import { BoardContext } from "./Context";
-import EditImage from "./EditImage";
-import "./styles/Summary.css";
-import { closeFullscreen, openFullscreen } from "./utils";
+import { BoardContext } from "../utils/Context";
+import EditImage from "../utils/EditImage";
+import "../styles/Summary.css";
+import { closeFullscreen, openFullscreen } from "../utils";
 
-import HiddenButtons from "./HiddenButtons";
+import HiddenButtons from "../utils/HiddenButtons";
 
 export default function Summary({ currentMock }) {
   const [mock, setmock] = useState(currentMock);

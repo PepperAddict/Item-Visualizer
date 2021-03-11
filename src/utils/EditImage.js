@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import mergeImages from "merge-images";
 
-import { closeFullscreen, openFullscreen } from "./utils";
-import HiddenButtons from "./HiddenButtons";
+import { closeFullscreen, openFullscreen } from "./index";
+
 
 export default function EditImage(props) {
   const canvas = useRef(null);
@@ -23,10 +23,11 @@ export default function EditImage(props) {
   let forUndo = [];
   let redoStack = [];
   const [context, setContext] = useState(null);
+  const [mounted, setMounted] = useState(false);
 
   const toDataURL = (url, callback) => {
     //this is for converting image to blob
-    fetch('https://cors-anywhere.herokuapp.com/' + url)
+    fetch("https://cors-anywhere.herokuapp.com/" + url)
       .then((res) => res.blob())
       .then((response) => {
         let newreader = new FileReader();
@@ -42,25 +43,28 @@ export default function EditImage(props) {
   };
 
   useEffect(() => {
+    setMounted(true);
+    if (props.image instanceof Blob) {
+      reader.readAsDataURL(props.image);
+      reader.onloadend = () => {
+        setbg(reader.result);
+      };
+    } else {
+      toDataURL(props.thumbnail, (dataUrl) => {
+        setbg(dataUrl);
+      });
+    }
 
-      if (props.image instanceof Blob) {
-        reader.readAsDataURL(props.image);
-        reader.onloadend = () => {
-          setbg(reader.result);
-        };
-      } else {
-        toDataURL(props.thumbnail, (dataUrl) => {
-          setbg(dataUrl);
-        });
-      }
-    
-  }, [reader, toDataURL]);
+    return () => setMounted(false);
+  }, [reader, toDataURL, mounted]);
 
   useEffect(() => {
-    if (canvas && bg) {
-      setContext(document.getElementById("canvasDiv").getContext("2d"));
+    if (canvas && bg && mounted) {
+      setContext(canvas.current.getContext("2d"));
     }
-  }, [canvas, bg]);
+
+    return () => setMounted(false);
+  }, [canvas, bg, mounted]);
 
   const addClick = (x, y, dragging) => {
     clickX.push(x);
@@ -87,12 +91,12 @@ export default function EditImage(props) {
     for (var i = 0; i < clickX.length; i++) {
       context.beginPath();
       context.moveTo(clickX[i - 1], clickY[i - 1]);
-      let lines = text.split('\n')
-      let lineheight = 15
-      for (var j = 0; j<lines.length; j++)  {
-        context.fillText(lines[j], clickX[i], clickY[i] + (j * lineheight));
+      let lines = text.split("\n");
+      let lineheight = 15;
+      for (var j = 0; j < lines.length; j++) {
+        context.fillText(lines[j], clickX[i], clickY[i] + j * lineheight);
       }
-      
+
       context.closePath();
       context.stroke();
     }
@@ -111,6 +115,7 @@ export default function EditImage(props) {
       else font();
     }
   };
+
   const touchMove = (e) => {
     e.preventDefault();
     const rect = canvas.current.getBoundingClientRect();
@@ -125,6 +130,7 @@ export default function EditImage(props) {
       else font();
     }
   };
+
   const down = (e) => {
     const rect = canvas.current.getBoundingClientRect();
     const sizeObj = {
@@ -139,6 +145,7 @@ export default function EditImage(props) {
       else font();
     }
   };
+
   const touchDown = (e) => {
     e.preventDefault();
     const rect = canvas.current.getBoundingClientRect();
@@ -175,27 +182,31 @@ export default function EditImage(props) {
   };
 
   const generateImage = async (e) => {
-    const drawing = document.getElementById("canvasDiv").toDataURL("image/png");
-    await mergeImages([bg, drawing]).then(async (b64) => {
-      //now lets convert the new image to blob for uploading
-      await fetch(b64)
-        .then((res) => res.blob())
-        .then(async (res) => {
-          const theFile = {
-            file: res,
-            name: "thumbnail",
-            ext: ".png",
-          };
-          props.setRawImage(res);
-          props.setFile(theFile);
-          props.setGeneratedImage(b64);
-          closeFullscreen(canny);
-          props.setEdited(true);
-          props.setEditImage(false);
-          props.setReady(true);
-        });
-    });
+    
+    if (mounted) {
+      const drawing = canvas.current.toDataURL("image/png");
+      await mergeImages([bg, drawing]).then(async (b64) => {
+        //now lets convert the new image to blob for uploading
+        await fetch(b64)
+          .then((res) => res.blob())
+          .then(async (res) => {
+            const newfile = new File([res], "generated-image.png", {
+              lastModified: Date.now(),
+              type: res.type,
+            });
+
+            props.setRawImage(res);
+            props.setFile(newfile);
+            props.setGeneratedImage(b64);
+            closeFullscreen(canny);
+            props.setEdited(true);
+            props.setEditImage(false);
+            props.setReady(true);
+          });
+      }).catch((err) => console.log(err))
+    }
   };
+
   const clearCanvas = (e) => {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     context.beginPath();
@@ -224,13 +235,6 @@ export default function EditImage(props) {
       // context.closePath();
       // context.stroke();
     }
-  };
-
-  const undo = (e) => {
-    let lastpoint = forUndo.pop();
-    redoStack.unshift(lastpoint);
-    redrawAll();
-    console.log(redoStack);
   };
 
   return (
