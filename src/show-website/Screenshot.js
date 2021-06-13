@@ -43,15 +43,10 @@ export default function ApiCall(props) {
             url: url,
             iframe: null,
           };
-          const myFile = new File([image], "thumbnail", { type: image.type });
+          const myFile = new File([image], "thumbnail.jpg", { type: image.type });
 
-          const theFile = {
-            file: myFile,
-            name: "thumbnail",
-            ext: ".png",
-          };
           setError(false)
-          props.setFile(theFile);
+          props.setFile(myFile);
           setLoading(false)
           await setCurrentMock(iFrameData);
           props.context.setSetup(true);
