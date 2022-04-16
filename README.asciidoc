@@ -11,7 +11,7 @@ This Monday app should help solve that without a separate software or service.
 
 Please visit the homepage to learn more!
 
-https://itemvisualizer.com/[Item Visualization Website]
+https://pepperaddict.github.io/item-visualizer-documentation/[Item Visualization Website]
 
 == Installation
 
@@ -21,7 +21,7 @@ image::https://dapulse-res.cloudinary.com/image/upload/f_auto,q_auto/remote_mond
 
 If you have further questions on how to install and use, visit our documentation:
 
-https://itemvisualizer.com/#/how[Item Visualization Documentation]
+https://pepperaddict.github.io/item-visualizer-documentation/#/how[Item Visualization Documentation]
 
 == Getting started 
 

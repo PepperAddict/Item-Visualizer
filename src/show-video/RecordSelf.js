@@ -2,7 +2,8 @@ import React, { useState, useRef, Fragment, useEffect } from "react";
 import Summary from "../update/Summary";
 import "../styles/Video.css";
 let mediaRecorder;
-const itemIcon = require('../icon/itemIcon.png')
+const itemIcon = require('../icon/itemIcon.png');
+const documentationEndpoint = "https://pepperaddict.github.io/item-visualizer-documentation/"
 export default function RecordSelf(props) {
   const vidEle = useRef(null);
   const videoBehind = useRef(null);
@@ -332,7 +333,7 @@ export default function RecordSelf(props) {
   };
 
   const goHere = (name) => {
-    window.open(`https://itemvisualizer.com/#/how#${name}`, "_blank");
+    window.open(`${documentationEndpoint}#/how#${name}`, "_blank");
   };
 
   const muteMe = (e) => {

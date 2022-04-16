@@ -1,6 +1,7 @@
 import Workspace from "../update/sendUpdate";
 import React, {useState} from 'react';
-import '../styles/Sidebar.css'
+import '../styles/Sidebar.css';
+const documentationEndpoint = "https://pepperaddict.github.io/item-visualizer-documentation/"
 
 
 export default function Sidebar({setWhichOne, monday, context, nav}) {
@@ -33,9 +34,9 @@ export default function Sidebar({setWhichOne, monday, context, nav}) {
             </ul>
           </nav>  
           <span className="how-button" onClick={e => whenClick('welcome', true)}>Welcome</span>
-          <a className="how-to-button how-button" href="https://itemvisualizer.com/#/how" target="_blank">How To Use</a>
-          <a className="how-to-button how-button" href="https://itemvisualizer.com/#/privacy" target="_blank">Privacy</a>
-          <a className="how-to-button how-button" href="https://itemvisualizer.com/#/contact" target="_blank">Contact</a> 
+          <a className="how-to-button how-button" href={documentationEndpoint + "#/how"} target="_blank">How To Use</a>
+          <a className="how-to-button how-button" href={documentationEndpoint + "#/privacy"} target="_blank">Privacy</a>
+          <a className="how-to-button how-button" href={documentationEndpoint + "#/contact"} target="_blank">Contact</a> 
           </div>
 
         </div>

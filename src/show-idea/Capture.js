@@ -13,6 +13,7 @@ export default function Capture(props) {
   const [globalStream, setStream] = useState(null);
   const [taken, setTaken] = useState(false);
   const [hideTip, setHideTip] = useState(true);
+  const documentationEndpoint = "https://pepperaddict.github.io/item-visualizer-documentation/"
 
   const canny = useRef(null);
   const [src] = useState(null);
@@ -318,7 +319,7 @@ export default function Capture(props) {
     }
   };
   const goHere = (name) => {
-    window.open(`https://itemvisualizer.com/#/how#${name}`, "_blank");
+    window.open(`${documentationEndpoint}#/how#${name}`, "_blank");
   };
 
   return (

@@ -20,7 +20,7 @@ export default function ({ context }) {
 <span className="how-notice">
   <p>You can go ahead and get started by using the <strong>Methods</strong> on the right</p>
   <p>Below are some videos on how to use this Monday's View App</p>
-  <p>Visit our <a href="https://itemvisualizer.com/" target="_blank">website</a> for more information.</p>
+  <p>Visit our <a href="https://pepperaddict.github.io/item-visualizer-documentation/" target="_blank">website</a> for more information.</p>
 </span>
       <div className="how-container">
         {context.play === 0 ? (
