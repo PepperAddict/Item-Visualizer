@@ -5,6 +5,7 @@ import support from "../icon/supports.png";
 import Capture from "./Capture";
 import Loading from "../utils/Loading";
 import "../styles/Prototype.css";
+const endpointRoute = 'https://iv-backend.herokuapp.com/';
 let controller;
 
 export default function Prototype(props) {
@@ -22,7 +23,7 @@ export default function Prototype(props) {
     const xdId = newurl[viewIndex + 1];
     try {
       const xd = await fetch(
-        "https://talkingcloud.io/api/1/xd-call/?xdid=" + xdId
+        endpointRoute + "api/1/xd-call/?xdid=" + xdId
       );
       await xd
         .json()
@@ -50,7 +51,7 @@ export default function Prototype(props) {
         const apiId = `figma-${id}`;
         if (id) {
           const figma = await fetch(
-            `https://talkingcloud.io/api/1/figma-call/?figid=${id}`
+            endpointRoute + `api/1/figma-call/?figid=${id}`
           );
           await figma
             .json()
@@ -95,7 +96,7 @@ export default function Prototype(props) {
       mode: "desktop",
       full: "yes",
     };
-    const talkingImage = `https://talkingcloud.io/api/1/play/?url=${url}&mode=${apicall.mode}&full=${apicall.full}`;
+    const talkingImage = `${endpointRoute}api/1/play/?url=${url}&mode=${apicall.mode}&full=${apicall.full}`;
     try {
       fetch(talkingImage, { signal: controller.signal })
         .then((res) => res.blob())

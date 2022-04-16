@@ -10,6 +10,7 @@ export default function ApiCall(props) {
   const [full, setFull] = useState("no");
   const [resolution, setResolution] = useState("desktop");
   const [loading, setLoading] = useState(false);
+  const endpointRoute = 'https://iv-backend.herokuapp.com/'
 
   const quickThumbnail = async (e) => {
 
@@ -22,7 +23,7 @@ export default function ApiCall(props) {
       isUrl = false;
     }
 
-    const talkingImage = `https://talkingcloud.io/api/1/play/?url=${url}&mode=${resolution}&full=${full}`;
+    const talkingImage = `${endpointRoute}api/1/puppeteer/?url=${url}&mode=${resolution}&full=${full}`;
     if (isUrl) {
       setLoading(true)
       controller = new AbortController();

@@ -13,6 +13,7 @@ export default function WorkspaceAndItem({ monday, file, context }) {
   const [token, setToken] = useState(null);
   // const [percent, setUploadPercentage] = useState("0");
   const [updateID, setUpdateID] = useState(null);
+  const endpointRoute = 'https://iv-backend.herokuapp.com/'
 
   const localstorage = (method, key, value = null) => {
     let name;
@@ -105,7 +106,7 @@ export default function WorkspaceAndItem({ monday, file, context }) {
     if (!alreadyKey) {
       setTheStatus({ code: "red", message: "Please Authenticate" });
       mWindow = window.open(
-        "https://talkingcloud.io/api/1/apiformun",
+        endpointRoute + "api/1/apiformun",
         "_blank",
         "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
       );
@@ -132,7 +133,7 @@ export default function WorkspaceAndItem({ monday, file, context }) {
           if (alreadyKey) {
             setTheStatus({ code: "red", message: "Please Re-Authenticate" });
             mWindow = window.open(
-              "https://talkingcloud.io/api/1/apiformun",
+              endpointRoute + "api/1/apiformun",
               "_blank",
               "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=800,height=800"
             );
